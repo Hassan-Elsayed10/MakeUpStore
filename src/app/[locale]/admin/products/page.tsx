@@ -101,8 +101,11 @@ export default function AdminProductsPage() {
         showToast(editingId ? tt('productUpdated') : tt('productAdded'));
         setModalOpen(false);
         fetchData();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        showToast(data.error || tt('error'), 'error');
       }
-    } catch {
+    } catch (err) {
       showToast(tt('error'), 'error');
     }
   };

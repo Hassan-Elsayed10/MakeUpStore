@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif'];
-const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
+const MAX_SIZE = 2 * 1024 * 1024; // 2 MB — keeps base64 payload under Vercel's 4.5 MB body limit
 
 export async function POST(request: NextRequest) {
   try {

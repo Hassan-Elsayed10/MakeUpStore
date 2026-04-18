@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { categories } from '@/db/schema';
 
+export const maxDuration = 30;
+
 export async function GET() {
   try {
     const allCategories = await db.select().from(categories);

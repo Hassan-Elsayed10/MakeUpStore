@@ -3,6 +3,8 @@ import { db } from '@/db';
 import { products } from '@/db/schema';
 import { desc } from 'drizzle-orm';
 
+export const maxDuration = 30;
+
 export async function GET() {
   try {
     const allProducts = await db.select().from(products).orderBy(desc(products.createdAt));
