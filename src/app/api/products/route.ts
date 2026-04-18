@@ -10,7 +10,8 @@ export async function GET() {
     const allProducts = await db.select().from(products).orderBy(desc(products.createdAt));
     return NextResponse.json({ products: allProducts });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+    console.error('[GET /api/products]', error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }
 
@@ -39,6 +40,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ product: newProduct[0] }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
+    console.error('[POST /api/products]', error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }

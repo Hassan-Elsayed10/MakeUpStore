@@ -9,7 +9,8 @@ export async function GET() {
     const allCategories = await db.select().from(categories);
     return NextResponse.json({ categories: allCategories });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch categories' }, { status: 500 });
+    console.error('[GET /api/categories]', error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }
 
@@ -36,6 +37,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ category: newCategory[0] }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create category' }, { status: 500 });
+    console.error('[POST /api/categories]', error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }
