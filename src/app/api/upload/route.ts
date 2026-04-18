@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { put } from '@vercel/blob';
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif'];
-const MAX_SIZE = 2 * 1024 * 1024; // 2 MB — keeps base64 payload under Vercel's 4.5 MB body limit
+const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,14 +27,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const base64 = buffer.toString('base64');
-    const dataUrl = `data:${file.type};base64,${base64}`;
+    const blob = await put(file.name, file, {
+      access: 'public',
+      addRandomSuffix: true,
+    });
 
-    return NextResponse.json({ url: dataUrl });
+    return NextResponse.json({ url: blob.url });
   } catch (error) {
     console.error('Upload error:', error);
-    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+    return NextResponse.json({ error: `Upload failed: ${String(error)}` }, { status: 500 });
   }
 }
