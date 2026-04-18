@@ -2,6 +2,7 @@ import { db } from '@/db';
 import { products, categories } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { Hero } from '@/components/home/Hero';
+import { Marquee } from '@/components/home/Marquee';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
 import { Categories } from '@/components/home/Categories';
 import { WhyChooseUs } from '@/components/home/WhyChooseUs';
@@ -25,6 +26,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
+      <Marquee />
       {featuredProducts.length > 0 && <FeaturedProducts products={featuredProducts} />}
       {allCategories.length > 0 && <Categories categories={allCategories} />}
       <WhyChooseUs />
