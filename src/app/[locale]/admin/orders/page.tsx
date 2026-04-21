@@ -39,6 +39,7 @@ const statusColors: Record<string, string> = {
 
 function OrderDetailsModal({ order, onClose }: { order: Order; onClose: () => void }) {
   const ct = useTranslations('common');
+  const t = useTranslations('admin');
 
   return (
     <AnimatePresence>
