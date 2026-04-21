@@ -15,6 +15,8 @@ interface Product {
   descriptionEn: string | null;
   descriptionAr: string | null;
   price: string;
+  discountPrice: string | null;
+  isOnSale: boolean | null;
   image: string | null;
   categoryId: number | null;
   featured: boolean | null;
