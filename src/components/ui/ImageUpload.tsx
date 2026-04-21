@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface ImageUploadProps {
   value: string; // current image URL (existing or just uploaded)
@@ -12,6 +13,7 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ value, onChange, label, className }: ImageUploadProps) {
+  const t = useTranslations('products');
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
@@ -84,7 +86,7 @@ export function ImageUpload({ value, onChange, label, className }: ImageUploadPr
               className="px-3 py-1.5 bg-white text-neutral-900 rounded-lg text-xs font-medium flex items-center gap-1.5 hover:bg-neutral-100 transition-colors"
             >
               <Upload className="w-3.5 h-3.5" />
-              Replace
+              {t('replace')}
             </button>
             <button
               type="button"
@@ -92,7 +94,7 @@ export function ImageUpload({ value, onChange, label, className }: ImageUploadPr
               className="px-3 py-1.5 bg-red-500 text-white rounded-lg text-xs font-medium flex items-center gap-1.5 hover:bg-red-600 transition-colors"
             >
               <X className="w-3.5 h-3.5" />
-              Remove
+              {t('remove')}
             </button>
           </div>
         </div>
@@ -113,7 +115,7 @@ export function ImageUpload({ value, onChange, label, className }: ImageUploadPr
           {uploading ? (
             <>
               <Loader2 className="w-8 h-8 text-primary-500 animate-spin" />
-              <p className="text-sm text-neutral-500">Uploading...</p>
+              <p className="text-sm text-neutral-500">{t('uploading')}</p>
             </>
           ) : (
             <>
@@ -122,10 +124,9 @@ export function ImageUpload({ value, onChange, label, className }: ImageUploadPr
               </div>
               <div className="text-center px-4">
                 <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  Drop image here, or{' '}
-                  <span className="text-primary-600 dark:text-primary-400">browse</span>
+                  {t('dropImage')}
                 </p>
-                <p className="text-xs text-neutral-400 mt-1">PNG, JPG, WebP up to 5 MB</p>
+                <p className="text-xs text-neutral-400 mt-1">{t('uploadLimits')}</p>
               </div>
             </>
           )}

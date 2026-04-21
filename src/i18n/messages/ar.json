@@ -6,6 +6,7 @@
     "about": "من نحن",
     "cart": "السلة",
     "wishlist": "المفضلة",
+    "offers": "العروض",
     "admin": "لوحة التحكم",
     "search": "بحث",
     "loading": "جاري التحميل...",
@@ -24,6 +25,8 @@
     "total": "الإجمالي",
     "subtotal": "المجموع الفرعي",
     "featured": "مميز",
+    "onSale": "تخفيض",
+    "off": "خصم",
     "categories": "الفئات",
     "all": "الكل",
     "save": "حفظ",
@@ -37,7 +40,19 @@
     "enabled": "مفعّل",
     "disabled": "معطّل",
     "yes": "نعم",
-    "no": "لا"
+    "no": "لا",
+    "id": "المعرف",
+    "image": "الصورة",
+    "status": "الحالة",
+    "email": "البريد الإلكتروني",
+    "date": "التاريخ",
+    "details": "التفاصيل",
+    "customer": "العميل",
+    "product": "المنتج",
+    "author": "الكاتب",
+    "comment": "التعليق",
+    "rating": "التقييم",
+    "reviews": "التقييمات"
   },
   "home": {
     "heroTitle": "اكتشفي إطلالتك المثالية",
@@ -54,7 +69,9 @@
     "crueltyFree": "خالية من القسوة",
     "crueltyFreeDesc": "لم تُختبر على الحيوانات أبداً، دائماً أخلاقية",
     "shipping": "شحن مجاني",
-    "shippingDesc": "شحن مجاني للطلبات التي تزيد عن 50 دولار"
+    "shippingDesc": "شحن مجاني للطلبات التي تزيد عن 50 دولار",
+    "specialOffers": "عروض خاصة",
+    "offersSubtitle": "عروض لفترة محدودة على منتجاتك المفضلة"
   },
   "products": {
     "title": "منتجاتنا",
@@ -75,7 +92,12 @@
     "noReviews": "لا توجد تقييمات بعد. كوني الأولى!",
     "relatedProducts": "منتجات ذات صلة",
     "addedToCart": "تمت الإضافة إلى السلة!",
-    "addedToWishlist": "تمت الإضافة إلى المفضلة!"
+    "addedToWishlist": "تمت الإضافة إلى المفضلة!",
+    "uploading": "جاري الرفع...",
+    "uploadLimits": "PNG, JPG, WebP حتى 5 ميجابايت",
+    "replace": "استبدال",
+    "remove": "إزالة",
+    "dropImage": "اسحب الصورة هنا أو تصفح"
   },
   "cart": {
     "title": "سلة التسوق",
@@ -161,7 +183,23 @@
     "loginButton": "تسجيل الدخول",
     "loginError": "كلمة المرور غير صحيحة",
     "logout": "تسجيل الخروج",
-    "confirmDelete": "هل أنت متأكد من حذف هذا العنصر؟"
+    "confirmDelete": "هل أنت متأكد من حذف هذا العنصر؟",
+    "adminPanel": "لوحة تحكم المشرف",
+    "checkingAccess": "جاري التحقق من الوصول...",
+    "offerPrice": "سعر العرض",
+    "productImage": "صورة المنتج",
+    "categoryImage": "صورة الفئة",
+    "searchOrders": "بحث برقم الطلب...",
+    "order": "الطلب",
+    "manageReviews": "إدارة تقييمات العملاء عبر جميع المنتجات",
+    "refresh": "تحديث",
+    "totalReviews": "إجمالي التقييمات",
+    "avgRating": "متوسط التقييم",
+    "fiveStarReviews": "تقييمات 5 نجوم",
+    "searchReviewsPlaceholder": "بحث بالاسم أو المنتج أو التعليق...",
+    "noReviewsFound": "لم يتم العثور على تقييمات تطابق بحثك.",
+    "noReviewsYet": "لا توجد تقييمات بعد.",
+    "confirmDeleteReview": "هل تريد حذف هذا التقييم؟ لا يمكن التراجع عن هذا الإجراء."
   },
   "toast": {
     "success": "تم بنجاح",
@@ -173,6 +211,8 @@
     "categoryUpdated": "تم تحديث الفئة بنجاح",
     "categoryDeleted": "تم حذف الفئة بنجاح",
     "settingsUpdated": "تم تحديث الإعدادات بنجاح",
-    "orderUpdated": "تم تحديث حالة الطلب"
+    "orderUpdated": "تم تحديث حالة الطلب",
+    "reviewSubmitted": "تم إرسال التقييم بنجاح!",
+    "reviewError": "فشل في إرسال التقييم"
   }
 }

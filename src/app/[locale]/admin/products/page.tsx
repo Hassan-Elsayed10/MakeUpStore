@@ -18,6 +18,8 @@ interface Product {
   descriptionEn: string | null;
   descriptionAr: string | null;
   price: string;
+  discountPrice: string | null;
+  isOnSale: boolean | null;
   image: string | null;
   categoryId: number | null;
   featured: boolean | null;
@@ -32,7 +34,7 @@ interface Category {
 
 const emptyForm = {
   nameEn: '', nameAr: '', descriptionEn: '', descriptionAr: '',
-  price: '', image: '', categoryId: '', featured: false,
+  price: '', discountPrice: '', isOnSale: false, image: '', categoryId: '', featured: false,
 };
 
 export default function AdminProductsPage() {
@@ -77,6 +79,8 @@ export default function AdminProductsPage() {
       descriptionEn: product.descriptionEn || '',
       descriptionAr: product.descriptionAr || '',
       price: product.price,
+      discountPrice: product.discountPrice || '',
+      isOnSale: product.isOnSale || false,
       image: product.image || '',
       categoryId: product.categoryId?.toString() || '',
       featured: product.featured || false,
@@ -151,11 +155,11 @@ export default function AdminProductsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
-                  <th className="text-start p-4 font-medium text-neutral-500">Image</th>
-                  <th className="text-start p-4 font-medium text-neutral-500">ID</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('image')}</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('id')}</th>
                   <th className="text-start p-4 font-medium text-neutral-500">{t('productName')}</th>
                   <th className="text-start p-4 font-medium text-neutral-500">{ct('price')}</th>
-                  <th className="text-start p-4 font-medium text-neutral-500">{ct('featured')}</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('status')}</th>
                   <th className="text-end p-4 font-medium text-neutral-500">{ct('edit')}</th>
                 </tr>
               </thead>
@@ -190,7 +194,10 @@ export default function AdminProductsPage() {
                       {formatPrice(product.price)}
                     </td>
                     <td className="p-4">
-                      {product.featured && <Star className="w-4 h-4 text-accent-500 fill-accent-500" />}
+                      <div className="flex items-center gap-2">
+                        {product.featured && <Star className="w-4 h-4 text-accent-500 fill-accent-500" />}
+                        {product.isOnSale && <Sparkles className="w-4 h-4 text-red-500 fill-red-500" />}
+                      </div>
                     </td>
                     <td className="p-4 text-end">
                       <div className="flex items-center justify-end gap-2">
@@ -264,7 +271,7 @@ export default function AdminProductsPage() {
             required
           />
           <ImageUpload
-            label="Product Image"
+            label={t('productImage')}
             value={form.image}
             onChange={(url) => setForm({ ...form, image: url })}
           />
@@ -285,6 +292,31 @@ export default function AdminProductsPage() {
               {ct('featured')}
             </span>
           </label>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-neutral-100 dark:border-neutral-800 pt-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.isOnSale}
+                onChange={(e) => setForm({ ...form, isOnSale: e.target.checked })}
+                className="w-4 h-4 rounded border-neutral-300 dark:border-neutral-700 text-red-600 focus:ring-red-500"
+              />
+              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                {ct('onSale')}
+              </span>
+            </label>
+            {form.isOnSale && (
+              <Input
+                label={t('offerPrice')}
+                type="number"
+                step="0.01"
+                min="0"
+                value={form.discountPrice}
+                onChange={(e) => setForm({ ...form, discountPrice: e.target.value })}
+                required
+              />
+            )}
+          </div>
           <div className="flex gap-3 pt-2">
             <Button type="submit" className="flex-1">{ct('save')}</Button>
             <Button type="button" variant="secondary" onClick={() => setModalOpen(false)}>

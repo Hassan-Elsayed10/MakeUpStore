@@ -31,6 +31,7 @@ export function ProductDetailsClient({
 }: ProductDetailsClientProps) {
   const t = useTranslations('common');
   const pt = useTranslations('products');
+  const tt = useTranslations('toast');
   const { addItem } = useCart();
   const { isInWishlist, toggleItem } = useWishlist();
   const { cartEnabled } = useFeatureFlags();
@@ -88,10 +89,10 @@ export function ProductDetailsClient({
         const data = await res.json();
         setAllReviews([data.review, ...allReviews]);
         setReviewForm({ author: '', rating: 5, comment: '' });
-        showToast('Review submitted!');
+        showToast(tt('reviewSubmitted') || 'Review submitted!');
       }
     } catch {
-      showToast('Failed to submit review', 'error');
+      showToast(tt('reviewError') || 'Failed to submit review', 'error');
     }
 
     setSubmittingReview(false);

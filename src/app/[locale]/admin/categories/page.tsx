@@ -129,8 +129,8 @@ export default function AdminCategoriesPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
-                  <th className="text-start p-4 font-medium text-neutral-500">Image</th>
-                  <th className="text-start p-4 font-medium text-neutral-500">ID</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('image')}</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('id')}</th>
                   <th className="text-start p-4 font-medium text-neutral-500">{t('categoryName')}</th>
                   <th className="text-start p-4 font-medium text-neutral-500">{t('slug')}</th>
                   <th className="text-end p-4 font-medium text-neutral-500">{ct('edit')}</th>
@@ -222,7 +222,7 @@ export default function AdminCategoriesPage() {
             placeholder="e.g., lips"
           />
           <ImageUpload
-            label="Category Image"
+            label={t('categoryImage')}
             value={form.image}
             onChange={(url) => setForm({ ...form, image: url })}
           />

@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 
 function AdminLogin({ onLogin }: { onLogin: () => void }) {
   const t = useTranslations('admin');
+  const ct = useTranslations('common');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -59,7 +60,7 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
               <span className="text-white/80 text-sm font-medium">Glamour</span>
             </div>
             <h1 className="text-2xl font-bold text-white">{t('login')}</h1>
-            <p className="text-white/70 text-sm mt-1">Admin Control Panel</p>
+            <p className="text-white/70 text-sm mt-1">{t('adminPanel')}</p>
           </div>
 
           {/* Form */}
@@ -92,7 +93,7 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
                 {loading ? (
                   <span className="flex items-center gap-2">
                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Verifying...
+                    {ct('loading')}
                   </span>
                 ) : (
                   t('loginButton')
@@ -115,6 +116,7 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const t = useTranslations('admin');
+  const ct = useTranslations('common');
   const pathname = usePathname();
   const [authenticated, setAuthenticated] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -143,7 +145,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-neutral-950">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-neutral-500">Checking access...</p>
+          <p className="text-sm text-neutral-500">{t('checkingAccess')}</p>
         </div>
       </div>
     );
@@ -158,7 +160,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     { href: '/admin/products' as const, label: t('products'), icon: Package },
     { href: '/admin/categories' as const, label: t('categories'), icon: FolderTree },
     { href: '/admin/orders' as const, label: t('orders'), icon: ShoppingCart },
-    { href: '/admin/reviews' as const, label: 'Reviews', icon: MessageSquare },
+    { href: '/admin/reviews' as const, label: ct('reviews'), icon: MessageSquare },
   ];
 
   return (
@@ -190,7 +192,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               </div>
               <div>
                 <p className="text-sm font-bold text-neutral-900 dark:text-white">Glamour Admin</p>
-                <p className="text-xs text-neutral-500">Control Panel</p>
+                <p className="text-xs text-neutral-500">{t('adminPanel')}</p>
               </div>
             </div>
 

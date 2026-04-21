@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useCart } from '@/providers/CartProvider';
@@ -16,10 +16,12 @@ export function Header() {
   const { totalItems } = useCart();
   const { cartEnabled } = useFeatureFlags();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const navLinks = [
     { href: '/' as const, label: t('home') },
     { href: '/products' as const, label: t('products') },
+    { href: '/offers' as const, label: t('offers') },
     { href: '/about' as const, label: t('about') },
   ];
 

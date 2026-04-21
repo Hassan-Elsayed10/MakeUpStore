@@ -27,6 +27,8 @@ export const products = pgTable('products', {
   descriptionEn: text('description_en'),
   descriptionAr: text('description_ar'),
   price: numeric('price', { precision: 10, scale: 2 }).notNull(),
+  discountPrice: numeric('discount_price', { precision: 10, scale: 2 }),
+  isOnSale: boolean('is_on_sale').default(false),
   image: text('image'),
   categoryId: integer('category_id').references(() => categories.id, { onDelete: 'set null' }),
   featured: boolean('featured').default(false),

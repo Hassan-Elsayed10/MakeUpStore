@@ -42,7 +42,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { nameEn, nameAr, descriptionEn, descriptionAr, price, image, categoryId, featured } = body;
+    const { nameEn, nameAr, descriptionEn, descriptionAr, price, discountPrice, isOnSale, image, categoryId, featured } = body;
 
     const updated = await db
       .update(products)
@@ -52,6 +52,8 @@ export async function PUT(
         ...(descriptionEn !== undefined && { descriptionEn: descriptionEn ? String(descriptionEn).trim() : null }),
         ...(descriptionAr !== undefined && { descriptionAr: descriptionAr ? String(descriptionAr).trim() : null }),
         ...(price !== undefined && { price: String(parseFloat(price)) }),
+        ...(discountPrice !== undefined && { discountPrice: discountPrice ? String(parseFloat(discountPrice)) : null }),
+        ...(isOnSale !== undefined && { isOnSale: Boolean(isOnSale) }),
         ...(image !== undefined && { image: image ? String(image).trim() : null }),
         ...(categoryId !== undefined && { categoryId: categoryId ? parseInt(categoryId) : null }),
         ...(featured !== undefined && { featured: Boolean(featured) }),

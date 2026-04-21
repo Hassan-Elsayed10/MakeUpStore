@@ -60,7 +60,7 @@ function OrderDetailsModal({ order, onClose }: { order: Order; onClose: () => vo
           <div className="flex items-center justify-between p-6 border-b border-neutral-200 dark:border-neutral-800">
             <div>
               <h2 className="text-lg font-bold text-neutral-900 dark:text-white">
-                Order #{order.id}
+                {t('order')} #{order.id}
               </h2>
               <p className="text-xs text-neutral-500 mt-0.5">
                 {new Date(order.createdAt).toLocaleString()}
@@ -78,7 +78,7 @@ function OrderDetailsModal({ order, onClose }: { order: Order; onClose: () => vo
             {/* Customer Info */}
             <div>
               <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-3 uppercase tracking-wide">
-                Customer
+                {ct('customer')}
               </h3>
               <div className="space-y-2">
                 <div className="flex items-center gap-3 text-sm">
@@ -101,7 +101,7 @@ function OrderDetailsModal({ order, onClose }: { order: Order; onClose: () => vo
             {/* Status */}
             <div>
               <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-3 uppercase tracking-wide">
-                Status
+                {ct('status')}
               </h3>
               <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[order.status] || statusColors.pending}`}>
                 {order.status}
@@ -212,7 +212,7 @@ export default function AdminOrdersPage() {
           <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search by order ID..."
+            placeholder={t('searchOrders')}
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
             className="w-full ps-9 pe-4 py-2 text-sm rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
@@ -235,13 +235,13 @@ export default function AdminOrdersPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
-                  <th className="text-start p-4 font-medium text-neutral-500">ID</th>
-                  <th className="text-start p-4 font-medium text-neutral-500">Customer</th>
-                  <th className="text-start p-4 font-medium text-neutral-500">Email</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('id')}</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('customer')}</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('email')}</th>
                   <th className="text-start p-4 font-medium text-neutral-500">{ct('total')}</th>
                   <th className="text-start p-4 font-medium text-neutral-500">{t('orderStatus')}</th>
-                  <th className="text-start p-4 font-medium text-neutral-500">Date</th>
-                  <th className="text-start p-4 font-medium text-neutral-500">Details</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('date')}</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('details')}</th>
                 </tr>
               </thead>
               <tbody>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations, useLocale } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Trash2, MessageSquare, Search, RefreshCw } from 'lucide-react';
 import { useToast } from '@/providers/ToastProvider';
@@ -30,6 +31,9 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export default function AdminReviewsPage() {
+  const t = useTranslations('admin');
+  const ct = useTranslations('common');
+  const locale = useLocale();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -43,7 +47,7 @@ export default function AdminReviewsPage() {
       const data = await res.json();
       setReviews(data.reviews || []);
     } catch {
-      showToast('Failed to load reviews', 'error');
+      showToast(t('reviewLoadError') || 'Failed to load reviews', 'error');
     } finally {
       setLoading(false);
     }
@@ -54,18 +58,18 @@ export default function AdminReviewsPage() {
   }, []);
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Delete this review? This cannot be undone.')) return;
+    if (!confirm(t('confirmDeleteReview'))) return;
     setDeletingId(id);
     try {
       const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
       if (res.ok) {
         setReviews((prev) => prev.filter((r) => r.id !== id));
-        showToast('Review deleted successfully', 'success');
+        showToast(t('reviewDeleted'), 'success');
       } else {
-        showToast('Failed to delete review', 'error');
+        showToast(t('reviewDeleteError'), 'error');
       }
     } catch {
-      showToast('Failed to delete review', 'error');
+      showToast(t('reviewDeleteError'), 'error');
     } finally {
       setDeletingId(null);
     }
@@ -90,9 +94,9 @@ export default function AdminReviewsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">Reviews</h1>
+          <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">{ct('reviews')}</h1>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            Manage customer reviews across all products
+            {t('manageReviews')}
           </p>
         </div>
         <button
@@ -101,17 +105,17 @@ export default function AdminReviewsPage() {
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-300 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors disabled:opacity-50"
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
+          {t('refresh')}
         </button>
       </div>
 
       {/* Stats cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { label: 'Total Reviews', value: reviews.length },
-          { label: 'Average Rating', value: avgRating },
+          { label: t('totalReviews'), value: reviews.length },
+          { label: t('avgRating'), value: avgRating },
           {
-            label: '5-Star Reviews',
+            label: t('fiveStarReviews'),
             value: reviews.filter((r) => r.rating === 5).length,
           },
         ].map((stat) => (
@@ -132,7 +136,7 @@ export default function AdminReviewsPage() {
         <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
         <input
           type="text"
-          placeholder="Search by author, product or comment..."
+          placeholder={t('searchReviewsPlaceholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full ps-9 pe-4 py-2.5 text-sm bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -149,14 +153,14 @@ export default function AdminReviewsPage() {
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-neutral-400 gap-3">
             <MessageSquare className="w-10 h-10 opacity-40" />
-            <p className="text-sm">{search ? 'No reviews match your search.' : 'No reviews yet.'}</p>
+            <p className="text-sm">{search ? t('noReviewsFound') : t('noReviewsYet')}</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/50">
-                  {['Product', 'Author', 'Rating', 'Comment', 'Date', ''].map((h) => (
+                  {[ct('product'), ct('author'), ct('rating'), ct('comment'), ct('date'), ''].map((h) => (
                     <th
                       key={h}
                       className="px-4 py-3 text-start text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide"

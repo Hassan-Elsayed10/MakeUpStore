@@ -17,6 +17,8 @@ interface Product {
   descriptionEn: string | null;
   descriptionAr: string | null;
   price: string;
+  discountPrice: string | null;
+  isOnSale: boolean | null;
   image: string | null;
   categoryId: number | null;
   featured: boolean | null;
@@ -85,6 +87,14 @@ export function ProductCard({ product, locale }: { product: Product; locale: str
             </div>
           )}
 
+          {/* Sale badge */}
+          {product.isOnSale && product.discountPrice && (
+            <div className="absolute top-3 start-3 mt-8 px-2.5 py-1 bg-red-500 text-white text-xs font-semibold rounded-full flex items-center gap-1">
+              <Sparkles className="w-3 h-3" />
+              {Math.round((1 - parseFloat(product.discountPrice) / parseFloat(product.price)) * 100)}% {t('off')}
+            </div>
+          )}
+
           {/* Actions overlay */}
           <div className="absolute top-3 end-3 flex flex-col gap-2">
             <motion.button
@@ -107,9 +117,22 @@ export function ProductCard({ product, locale }: { product: Product; locale: str
             {name}
           </h3>
           <div className="flex items-center justify-between mt-2">
-            <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
-              {formatPrice(product.price)}
-            </span>
+            <div className="flex flex-col">
+              {product.isOnSale && product.discountPrice ? (
+                <>
+                  <span className="text-lg font-bold text-red-600 dark:text-red-400">
+                    {formatPrice(product.discountPrice)}
+                  </span>
+                  <span className="text-xs text-neutral-500 line-through">
+                    {formatPrice(product.price)}
+                  </span>
+                </>
+              ) : (
+                <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
+                  {formatPrice(product.price)}
+                </span>
+              )}
+            </div>
             {cartEnabled && (
               <motion.button
                 whileTap={{ scale: 0.9 }}

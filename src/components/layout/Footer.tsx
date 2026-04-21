@@ -1,11 +1,12 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import { Sparkles, Instagram, Twitter, Facebook } from 'lucide-react';
 
 export function Footer() {
   const t = useTranslations('common');
+  const pathname = usePathname();
 
   return (
     <footer className="bg-neutral-50 dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800">
