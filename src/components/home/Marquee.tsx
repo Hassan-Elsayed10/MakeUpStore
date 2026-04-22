@@ -1,10 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Truck, ShieldCheck, Sparkles, Star, Heart, Award } from 'lucide-react';
+import { BadgePercent, ShieldCheck, Sparkles, Star, Heart, Award } from 'lucide-react';
 
 const items = [
-  { icon: Truck, key: 'shipping' },
+  { icon: BadgePercent, key: 'shipping' },
   { icon: ShieldCheck, key: 'quality' },
   { icon: Sparkles, key: 'crueltyFree' },
   { icon: Star, key: 'quality' },

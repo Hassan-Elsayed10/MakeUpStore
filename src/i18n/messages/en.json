@@ -71,7 +71,9 @@
     "shipping": "Free Shipping",
     "shippingDesc": "Complimentary shipping on orders over $50",
     "specialOffers": "Special Offers",
-    "offersSubtitle": "Limited time deals on your favorite products"
+    "offersSubtitle": "Limited time deals on your favorite products",
+    "onSale": "On Sale",
+    "badge": "Premium Beauty Collection"
   },
   "products": {
     "title": "Our Products",
@@ -139,7 +141,18 @@
     "value3Title": "Innovation",
     "value3Text": "Cutting-edge formulations backed by science.",
     "value4Title": "Community",
-    "value4Text": "Building connections through the love of beauty."
+    "value4Text": "Building connections through the love of beauty.",
+    "contactTitle": "Contact Us",
+    "locationTitle": "Our Location",
+    "locationText": "المنشية الأسكندرية شارع النصر سوق سوريا بالداخل أمام بنزينه التعاون وكشرى الزعيم",
+    "whatsappTitle": "WhatsApp",
+    "whatsappNumber": "01281834012"
+  },
+  "footer": {
+    "description": "Premium beauty marketplace curated for elegance and quality. Elevate your everyday routine with our exclusive collections.",
+    "quickLinks": "Quick Links",
+    "account": "My Account",
+    "rightsReserved": "All rights reserved."
   },
   "admin": {
     "dashboard": "Dashboard",

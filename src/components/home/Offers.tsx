@@ -26,13 +26,6 @@ export function Offers({ products }: { products: Product[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'start 0.3'],
-  });
-  const headerY = useTransform(scrollYProgress, [0, 1], [60, 0]);
-  const headerOpacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
     const amount = 320;
@@ -52,8 +45,11 @@ export function Offers({ products }: { products: Product[] }) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
-          style={{ y: headerY, opacity: headerOpacity }}
-          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12"
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12 transform-gpu"
         >
           <div>
             <div className="flex items-center gap-2 text-accent-400 mb-2 font-semibold">
