@@ -111,7 +111,7 @@ export function Hero() {
           </motion.div>
 
           {/* Staggered & Masked Title Reveal with Alternate Typing */}
-          <h1 className="text-[3.25rem] sm:text-6xl lg:text-[5.5rem] xl:text-[7rem] font-bold font-display leading-[0.95] tracking-tighter mb-8 z-10 relative flex flex-wrap">
+          <h1 className="text-[3.25rem] sm:text-2xl lg:text-3xl xl:text-4xl font-bold font-display leading-[2] tracking-tighter mb-8 z-10 relative flex flex-wrap">
             {words.map((word, i) => (
               <span key={i} className="block overflow-hidden pb-1 sm:pb-3 mr-[0.25em] rtl:mr-0 rtl:ml-[0.25em]">
                 <motion.span

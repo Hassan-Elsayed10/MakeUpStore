@@ -140,6 +140,18 @@ export function Footer() {
                 </div>
               </li>
             </ul>
+            {/* Embedded Map */}
+            <div className="w-full h-40 mt-6 rounded-2xl overflow-hidden border border-border shadow-inner grayscale hover:grayscale-0 transition-all duration-500">
+              <iframe
+                src="https://maps.google.com/maps?q=31.19740104675293,29.889686584472656&z=17&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
         </div>
 

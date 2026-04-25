@@ -31,8 +31,26 @@ export default async function HomePage() {
     // DB might not be ready yet
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'الْمُلْكُ للهِ',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001',
+    logo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/og-image.jpg`,
+    description: 'Premium makeup products crafted for every skin tone and style.',
+    sameAs: [
+      'https://instagram.com/almulkulillah',
+      'https://tiktok.com/@almulkulillah',
+      'https://t.me/almulkulillah'
+    ]
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Hero />
       <Marquee />
       {featuredProducts.length > 0 && <FeaturedProducts products={featuredProducts} />}

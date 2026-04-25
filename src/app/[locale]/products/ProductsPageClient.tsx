@@ -7,6 +7,7 @@ import { getLocalizedField } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SlidersHorizontal, Sparkles, Filter, PackageX } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 interface Product {
   id: number;
@@ -41,8 +42,23 @@ export function ProductsPageClient({
   const t = useTranslations('products');
   const ct = useTranslations('common');
   const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [sort, setSort] = useState('newest');
-  const [filterCategory, setFilterCategory] = useState(selectedCategory);
+
+  // Use the prop instead of state to avoid mismatch with URL
+  const filterCategory = selectedCategory;
+
+  const handleCategoryChange = (slug: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (slug) {
+      params.set('category', slug);
+    } else {
+      params.delete('category');
+    }
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   const filteredProducts = useMemo(() => {
     let filtered = [...products];
@@ -103,50 +119,48 @@ export function ProductsPageClient({
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             {/* Category selection */}
             <div className="flex items-center gap-4 overflow-x-auto scrollbar-hide pb-2 md:pb-0">
-               <div className="flex items-center gap-2 p-2 px-3 rounded-xl bg-primary-100/50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400">
-                  <Filter className="w-4 h-4" />
-                  <span className="text-sm font-semibold uppercase tracking-wider">{ct('categories')}</span>
-               </div>
-               
-               <div className="flex gap-2">
+              <div className="flex items-center gap-2 p-2 px-3 rounded-xl bg-primary-100/50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400">
+                <Filter className="w-4 h-4" />
+                <span className="text-sm font-semibold uppercase tracking-wider">{ct('categories')}</span>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleCategoryChange('')}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${!filterCategory
+                      ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/20'
+                      : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-primary-50 dark:hover:bg-primary-900/30'
+                    }`}
+                >
+                  {ct('all')}
+                </button>
+                {categories.map((cat) => (
                   <button
-                    onClick={() => setFilterCategory('')}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
-                      !filterCategory
+                    key={cat.id}
+                    onClick={() => handleCategoryChange(cat.slug)}
+                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${filterCategory === cat.slug
                         ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/20'
                         : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-primary-50 dark:hover:bg-primary-900/30'
-                    }`}
-                  >
-                    {ct('all')}
-                  </button>
-                  {categories.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => setFilterCategory(cat.slug)}
-                      className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
-                        filterCategory === cat.slug
-                          ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/20'
-                          : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-primary-50 dark:hover:bg-primary-900/30'
                       }`}
-                    >
-                      {getLocalizedField(cat, 'name', locale)}
-                    </button>
-                  ))}
-               </div>
+                  >
+                    {getLocalizedField(cat, 'name', locale)}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Sorting */}
             <div className="flex items-center gap-3 self-end md:self-auto border-t md:border-t-0 pt-4 md:pt-0 border-border">
-               <SlidersHorizontal className="w-4 h-4 text-neutral-400" />
-               <select
-                 value={sort}
-                 onChange={(e) => setSort(e.target.value)}
-                 className="text-sm bg-transparent border-none focus:ring-0 text-neutral-700 dark:text-neutral-300 font-medium cursor-pointer"
-               >
-                 <option value="newest">{t('sortNewest')}</option>
-                 <option value="price-low">{t('sortPriceLow')}</option>
-                 <option value="price-high">{t('sortPriceHigh')}</option>
-               </select>
+              <SlidersHorizontal className="w-4 h-4 text-neutral-400" />
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className="text-sm bg-transparent border-none focus:ring-0 text-neutral-700 dark:text-neutral-300 font-medium cursor-pointer"
+              >
+                <option value="newest">{t('sortNewest')}</option>
+                <option value="price-low">{t('sortPriceLow')}</option>
+                <option value="price-high">{t('sortPriceHigh')}</option>
+              </select>
             </div>
           </div>
         </div>
@@ -154,7 +168,7 @@ export function ProductsPageClient({
         {/* Product Grid */}
         <AnimatePresence mode="wait">
           {filteredProducts.length > 0 ? (
-            <motion.div 
+            <motion.div
               key={filterCategory || 'all'}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -174,17 +188,17 @@ export function ProductsPageClient({
               ))}
             </motion.div>
           ) : (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-32 space-y-4"
             >
               <div className="w-20 h-20 rounded-full bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center mx-auto">
-                 <PackageX className="w-10 h-10 text-neutral-400" />
+                <PackageX className="w-10 h-10 text-neutral-400" />
               </div>
               <h3 className="text-xl font-bold text-neutral-900 dark:text-white">{t('noProducts')}</h3>
-              <button 
-                onClick={() => setFilterCategory('')}
+              <button
+                onClick={() => handleCategoryChange('')}
                 className="text-primary-600 dark:text-primary-400 font-semibold hover:underline"
               >
                 {ct('viewAll')}

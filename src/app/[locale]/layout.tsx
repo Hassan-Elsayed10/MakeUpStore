@@ -14,11 +14,55 @@ import { Footer } from '@/components/layout/Footer';
 import '@/app/globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'),
   title: {
-    default: 'الْمُلْكُ للهِ - Premium Makeup Store',
+    default: 'الْمُلْكُ للهِ - Premium Makeup & Luxury Cosmetics',
     template: '%s | الْمُلْكُ للهِ',
   },
-  description: 'Premium makeup products crafted for every skin tone and style.',
+  description: 'Discover our premium selection of luxury makeup and cosmetic products. Curated for every skin tone, style, and beauty enthusiast.',
+  keywords: ['makeup', 'cosmetics', 'luxury beauty', 'premium skincare', 'lipstick', 'foundation', 'beauty store', 'الْمُلْكُ للهِ'],
+  authors: [{ name: 'الْمُلْكُ للهِ Beauty' }],
+  creator: 'الْمُلْكُ للهِ',
+  publisher: 'الْمُلْكُ للهِ',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    title: 'الْمُلْكُ للهِ - Premium Makeup Store',
+    description: 'Premium makeup products crafted for every skin tone and style.',
+    url: '/',
+    siteName: 'الْمُلْكُ للهِ',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'الْمُلْكُ للهِ - Premium Makeup Store',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'الْمُلْكُ للهِ - Premium Makeup Store',
+    description: 'Premium makeup products crafted for every skin tone and style.',
+    images: ['/og-image.jpg'],
+    creator: '@almulklillah',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default async function LocaleLayout({

@@ -26,9 +26,9 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/80 dark:bg-neutral-950/80 backdrop-blur-lg border-b border-neutral-200 dark:border-neutral-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-neutral-950/80 backdrop-blur-lg border-b border-neutral-200 dark:border-neutral-800">
+      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link
             href="/"
@@ -36,9 +36,14 @@ export function Header() {
           >
             <img
               src="/logo.png"
-              className="w-30 h-12 rounded-[5px] object-contain"
+              alt="الْمُلْكُ للهِ Logo"
+              className="w-40 h-20 dark:hidden"
             />
-            
+            <img
+              src="/darklogo.png"
+              alt="الْمُلْكُ للهِ Dark Logo"
+              className="w-40 h-20 hidden dark:block"
+            />
           </Link>
 
           {/* Desktop Nav */}

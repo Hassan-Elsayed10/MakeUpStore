@@ -193,13 +193,15 @@ export default function AboutPage() {
                 </div>
 
                 <div className="relative aspect-video lg:aspect-auto rounded-3xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
-                   <Image
-                     src="/about_showroom.png"
-                     alt="Our Showroom"
-                     fill
-                     className="object-cover opacity-60"
+                   <iframe
+                     src="https://maps.google.com/maps?q=31.19740104675293,29.889686584472656&z=17&output=embed"
+                     className="absolute inset-0 w-full h-full"
+                     style={{ border: 0 }}
+                     allowFullScreen
+                     loading="lazy"
+                     referrerPolicy="no-referrer-when-downgrade"
                    />
-                   <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent pointer-events-none" />
                 </div>
              </div>
           </div>
