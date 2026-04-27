@@ -5,6 +5,21 @@ import { notFound } from 'next/navigation';
 import { ProductDetailsClient } from './ProductDetailsClient';
 import type { Metadata, ResolvingMetadata } from 'next';
 
+export async function generateStaticParams() {
+  try {
+    const allProducts = await db.select({ id: products.id }).from(products);
+    const locales = ['en', 'ar'];
+    return locales.flatMap((locale) =>
+      allProducts.map((product) => ({
+        locale,
+        id: product.id.toString(),
+      }))
+    );
+  } catch {
+    return [];
+  }
+}
+
 type Props = {
   params: { id: string; locale: string };
 };
@@ -26,11 +41,18 @@ export async function generateMetadata(
     const localizedName = params.locale === 'ar' ? product.nameAr : product.nameEn;
     const localizedDesc = (params.locale === 'ar' ? product.descriptionAr : product.descriptionEn) || 'Premium makeup product';
 
-    const mainImage = product.image || '/og-image.jpg';
+    const mainImage = product.image || '/og-image.png';
 
     return {
       title: localizedName,
       description: localizedDesc,
+      alternates: {
+        canonical: `/${params.locale}/products/${id}`,
+        languages: {
+          'en': `/en/products/${id}`,
+          'ar': `/ar/products/${id}`,
+        },
+      },
       openGraph: {
         title: localizedName,
         description: localizedDesc,
@@ -102,7 +124,7 @@ export default async function ProductPage({ params }: Props) {
     sku: product.id.toString(),
     offers: {
       '@type': 'Offer',
-      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${locale}/products/${product.id}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${product.id}`,
       priceCurrency: 'USD',
       price: product.price,
       availability: 'https://schema.org/InStock',

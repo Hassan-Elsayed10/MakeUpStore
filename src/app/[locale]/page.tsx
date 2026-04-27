@@ -7,6 +7,42 @@ import { FeaturedProducts } from '@/components/home/FeaturedProducts';
 import { Offers } from '@/components/home/Offers';
 import { Categories } from '@/components/home/Categories';
 import { WhyChooseUs } from '@/components/home/WhyChooseUs';
+import type { Metadata } from 'next';
+
+type Props = {
+  params: { locale: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = params;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
+
+  const isArabic = locale === 'ar';
+  const title = isArabic
+    ? 'الْمُلْكُ للهِ - متجر مستحضرات التجميل الفاخرة'
+    : 'الْمُلْكُ للهِ - Premium Makeup & Luxury Cosmetics';
+  const description = isArabic
+    ? 'اكتشفي مجموعتنا المميزة من مستحضرات التجميل الفاخرة. منتجات مختارة بعناية لكل لون بشرة وأسلوب.'
+    : 'Discover our premium selection of luxury makeup and cosmetic products. Curated for every skin tone, style, and beauty enthusiast.';
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}`,
+      languages: {
+        'en': `${siteUrl}/en`,
+        'ar': `${siteUrl}/ar`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/${locale}`,
+      type: 'website',
+    },
+  };
+}
 
 export default async function HomePage() {
   let featuredProducts: any[] = [];

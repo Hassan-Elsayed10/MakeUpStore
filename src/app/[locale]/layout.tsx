@@ -13,14 +13,16 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import '@/app/globals.css';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'),
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'الْمُلْكُ للهِ - Premium Makeup & Luxury Cosmetics',
     template: '%s | الْمُلْكُ للهِ',
   },
   description: 'Discover our premium selection of luxury makeup and cosmetic products. Curated for every skin tone, style, and beauty enthusiast.',
-  keywords: ['makeup', 'cosmetics', 'luxury beauty', 'premium skincare', 'lipstick', 'foundation', 'beauty store', 'الْمُلْكُ للهِ'],
+  keywords: ['makeup', 'cosmetics', 'luxury beauty', 'premium skincare', 'lipstick', 'foundation', 'beauty store', 'مكياج', 'مستحضرات تجميل', 'الْمُلْكُ للهِ'],
   authors: [{ name: 'الْمُلْكُ للهِ Beauty' }],
   creator: 'الْمُلْكُ للهِ',
   publisher: 'الْمُلْكُ للهِ',
@@ -29,6 +31,13 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  alternates: {
+    canonical: '/',
+    languages: {
+      'en': '/en',
+      'ar': '/ar',
+    },
+  },
   openGraph: {
     title: 'الْمُلْكُ للهِ - Premium Makeup Store',
     description: 'Premium makeup products crafted for every skin tone and style.',
@@ -36,20 +45,21 @@ export const metadata: Metadata = {
     siteName: 'الْمُلْكُ للهِ',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'الْمُلْكُ للهِ - Premium Makeup Store',
       },
     ],
     locale: 'en_US',
+    alternateLocale: 'ar_SA',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'الْمُلْكُ للهِ - Premium Makeup Store',
     description: 'Premium makeup products crafted for every skin tone and style.',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.png'],
     creator: '@almulklillah',
   },
   robots: {

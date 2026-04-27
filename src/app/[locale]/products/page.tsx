@@ -26,6 +26,13 @@ export async function generateMetadata(
         return {
           title: `${localizedName} Collection`,
           description: `Explore our premium selection of ${localizedName} makeup products.`,
+          alternates: {
+            canonical: `/${locale}/products?category=${categorySlug}`,
+            languages: {
+              'en': `/en/products?category=${categorySlug}`,
+              'ar': `/ar/products?category=${categorySlug}`,
+            },
+          },
           openGraph: {
             title: `${localizedName} | الْمُلْكُ للهِ`,
             description: `Explore our premium selection of ${localizedName} makeup products.`,
@@ -40,6 +47,13 @@ export async function generateMetadata(
   return {
     title: 'All Products',
     description: 'Browse our complete collection of premium luxury makeup and cosmetic products.',
+    alternates: {
+      canonical: `/${locale}/products`,
+      languages: {
+        'en': `/en/products`,
+        'ar': `/ar/products`,
+      },
+    },
     openGraph: {
       title: 'All Products | الْمُلْكُ للهِ',
       description: 'Browse our complete collection of premium luxury makeup and cosmetic products.',
@@ -86,13 +100,13 @@ export default async function ProductsPage({ searchParams, params }: Props) {
     '@type': 'CollectionPage',
     name: searchParamsObj.category ? `${currentCategoryName} Collection` : 'All Products',
     description: searchParamsObj.category ? `Explore our premium selection of ${currentCategoryName} makeup products.` : 'Browse our complete collection of premium luxury makeup and cosmetic products.',
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${params.locale}/products${searchParamsObj.category ? `?category=${searchParamsObj.category}` : ''}`,
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products${searchParamsObj.category ? `?category=${searchParamsObj.category}` : ''}`,
     hasPart: allProducts.slice(0, 10).map((product) => {
       const localizedName = params.locale === 'ar' ? product.nameAr : product.nameEn;
       return {
         '@type': 'Product',
         name: localizedName,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${params.locale}/products/${product.id}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products/${product.id}`,
       };
     })
   };
@@ -105,13 +119,13 @@ export default async function ProductsPage({ searchParams, params }: Props) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${params.locale}`,
+        item: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}`,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: searchParamsObj.category ? currentCategoryName : 'Products',
-        item: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${params.locale}/products${searchParamsObj.category ? `?category=${searchParamsObj.category}` : ''}`,
+        item: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products${searchParamsObj.category ? `?category=${searchParamsObj.category}` : ''}`,
       }
     ]
   };

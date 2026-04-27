@@ -7,6 +7,13 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Exclusive Offers & Discounts',
   description: 'Shop our exclusive beauty offers and discounted luxury makeup products.',
+  alternates: {
+    canonical: '/offers',
+    languages: {
+      'en': '/en/offers',
+      'ar': '/ar/offers',
+    },
+  },
   openGraph: {
     title: 'Exclusive Offers & Discounts | الْمُلْكُ للهِ',
     description: 'Shop our exclusive beauty offers and discounted luxury makeup products.',
@@ -37,13 +44,13 @@ export default async function OffersPage({
     '@type': 'CollectionPage',
     name: 'Exclusive Offers & Discounts',
     description: 'Shop our exclusive beauty offers and discounted luxury makeup products.',
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${locale}/offers`,
+    url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/offers`,
     hasPart: saleProducts.slice(0, 10).map((product) => {
       const localizedName = locale === 'ar' ? product.nameAr : product.nameEn;
       return {
         '@type': 'Product',
         name: localizedName,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${locale}/products/${product.id}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${product.id}`,
       };
     })
   };
