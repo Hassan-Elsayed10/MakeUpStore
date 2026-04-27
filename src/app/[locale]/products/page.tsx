@@ -107,6 +107,12 @@ export default async function ProductsPage({ searchParams, params }: Props) {
         '@type': 'Product',
         name: localizedName,
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products/${product.id}`,
+        offers: {
+          '@type': 'Offer',
+          price: product.price,
+          priceCurrency: 'EGP',
+          availability: 'https://schema.org/InStock',
+        }
       };
     })
   };
