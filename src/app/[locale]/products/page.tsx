@@ -106,6 +106,12 @@ export default async function ProductsPage({ searchParams, params }: Props) {
       return {
         '@type': 'Product',
         name: localizedName,
+        image: product.image ? [product.image] : [],
+        description: params.locale === 'ar' ? product.descriptionAr : product.descriptionEn,
+        brand: {
+          '@type': 'Brand',
+          name: 'الْمُلْكُ للهِ'
+        },
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products/${product.id}`,
         offers: {
           '@type': 'Offer',

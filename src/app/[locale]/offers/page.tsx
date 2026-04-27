@@ -50,6 +50,12 @@ export default async function OffersPage({
       return {
         '@type': 'Product',
         name: localizedName,
+        image: product.image ? [product.image] : [],
+        description: locale === 'ar' ? product.descriptionAr : product.descriptionEn,
+        brand: {
+          '@type': 'Brand',
+          name: 'الْمُلْكُ للهِ'
+        },
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${product.id}`,
         offers: {
           '@type': 'Offer',

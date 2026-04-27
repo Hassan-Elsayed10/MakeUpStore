@@ -122,10 +122,14 @@ export default async function ProductPage({ params }: Props) {
     image: images,
     description: localizedDesc,
     sku: product.id.toString(),
+    brand: {
+      '@type': 'Brand',
+      name: 'الْمُلْكُ للهِ'
+    },
     offers: {
       '@type': 'Offer',
       url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${product.id}`,
-      priceCurrency: 'USD',
+      priceCurrency: 'EGP',
       price: product.price,
       availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
