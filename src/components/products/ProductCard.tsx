@@ -38,11 +38,14 @@ export function ProductCard({ product, locale }: { product: Product; locale: str
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    const effectivePrice = product.isOnSale && product.discountPrice
+      ? parseFloat(product.discountPrice)
+      : parseFloat(product.price);
     addItem({
       productId: product.id,
       nameEn: product.nameEn,
       nameAr: product.nameAr,
-      price: parseFloat(product.price),
+      price: effectivePrice,
       image: product.image,
     });
     showToast(pt('addedToCart'));

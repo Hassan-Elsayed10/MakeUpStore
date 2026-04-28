@@ -103,6 +103,9 @@ export default async function ProductsPage({ searchParams, params }: Props) {
     url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products${searchParamsObj.category ? `?category=${searchParamsObj.category}` : ''}`,
     hasPart: allProducts.slice(0, 10).map((product) => {
       const localizedName = params.locale === 'ar' ? product.nameAr : product.nameEn;
+      const effectivePrice = product.isOnSale && product.discountPrice
+        ? parseFloat(product.discountPrice)
+        : parseFloat(product.price);
       return {
         '@type': 'Product',
         name: localizedName,
@@ -115,9 +118,10 @@ export default async function ProductsPage({ searchParams, params }: Props) {
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products/${product.id}`,
         offers: {
           '@type': 'Offer',
-          price: product.price,
+          price: effectivePrice,
           priceCurrency: 'EGP',
           availability: 'https://schema.org/InStock',
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products/${product.id}`,
         }
       };
     })

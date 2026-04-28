@@ -115,7 +115,11 @@ export default async function ProductPage({ params }: Props) {
   
   const images = product.image ? [product.image] : [];
 
-  const jsonLd = {
+  const effectivePrice = product.isOnSale && product.discountPrice
+    ? parseFloat(product.discountPrice)
+    : parseFloat(product.price);
+
+  const jsonLd: Record<string, any> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: localizedName,
@@ -130,18 +134,36 @@ export default async function ProductPage({ params }: Props) {
       '@type': 'Offer',
       url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${product.id}`,
       priceCurrency: 'EGP',
-      price: product.price,
+      price: effectivePrice,
       availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
     },
-    ...(productReviews.length > 0 && {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: productReviews.reduce((acc: number, rev: any) => acc + rev.rating, 0) / productReviews.length,
-        reviewCount: productReviews.length,
-      }
-    })
   };
+
+  if (productReviews.length > 0) {
+    jsonLd.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: (productReviews.reduce((acc: number, rev: any) => acc + rev.rating, 0) / productReviews.length).toFixed(1),
+      reviewCount: productReviews.length,
+      bestRating: 5,
+      worstRating: 1,
+    };
+    jsonLd.review = productReviews.map((rev: any) => ({
+      '@type': 'Review',
+      author: {
+        '@type': 'Person',
+        name: rev.author,
+      },
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: rev.rating,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      ...(rev.comment && { reviewBody: rev.comment }),
+      datePublished: rev.createdAt ? new Date(rev.createdAt).toISOString().split('T')[0] : undefined,
+    }));
+  }
 
   return (
     <>

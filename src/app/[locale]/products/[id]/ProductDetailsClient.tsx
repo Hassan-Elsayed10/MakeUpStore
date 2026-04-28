@@ -49,13 +49,17 @@ export function ProductDetailsClient({
       ? (allReviews.reduce((sum: number, r: any) => sum + r.rating, 0) / allReviews.length).toFixed(1)
       : null;
 
+  const effectivePrice = product.isOnSale && product.discountPrice
+    ? parseFloat(product.discountPrice)
+    : parseFloat(product.price);
+
   const handleAddToCart = () => {
     for (let i = 0; i < qty; i++) {
       addItem({
         productId: product.id,
         nameEn: product.nameEn,
         nameAr: product.nameAr,
-        price: parseFloat(product.price),
+        price: effectivePrice,
         image: product.image,
       });
     }
@@ -163,9 +167,22 @@ export function ProductDetailsClient({
               </div>
             )}
 
-            <p className="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6">
-              {formatPrice(product.price)}
-            </p>
+            <div className="mb-6">
+              {product.isOnSale && product.discountPrice ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl font-bold text-red-600 dark:text-red-400">
+                    {formatPrice(product.discountPrice)}
+                  </span>
+                  <span className="text-xl text-neutral-500 line-through">
+                    {formatPrice(product.price)}
+                  </span>
+                </div>
+              ) : (
+                <p className="text-3xl font-bold text-primary-600 dark:text-primary-400">
+                  {formatPrice(product.price)}
+                </p>
+              )}
+            </div>
 
             {description && (
               <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-8">
