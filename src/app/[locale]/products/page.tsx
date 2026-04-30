@@ -41,7 +41,7 @@ export async function generateMetadata(
           },
         };
       }
-    } catch {}
+    } catch { }
   }
 
   return {
