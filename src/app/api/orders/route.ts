@@ -18,9 +18,9 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { customerName, customerEmail, customerPhone, items, total } = body;
+    const { customerName, customerAddress, customerPhone, items, total } = body;
 
-    if (!customerName || !customerEmail || !items || !Array.isArray(items) || items.length === 0) {
+    if (!customerName || !customerAddress || !customerPhone || !items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -28,8 +28,8 @@ export async function POST(request: NextRequest) {
       .insert(orders)
       .values({
         customerName: String(customerName).trim(),
-        customerEmail: String(customerEmail).trim(),
-        customerPhone: customerPhone ? String(customerPhone).trim() : null,
+        customerAddress: String(customerAddress).trim(),
+        customerPhone: String(customerPhone).trim(),
         total: String(parseFloat(total)),
         status: 'pending',
       })

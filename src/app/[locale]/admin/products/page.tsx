@@ -23,6 +23,7 @@ interface Product {
   image: string | null;
   categoryId: number | null;
   featured: boolean | null;
+  outOfStock: boolean | null;
 }
 
 interface Category {
@@ -34,7 +35,7 @@ interface Category {
 
 const emptyForm = {
   nameEn: '', nameAr: '', descriptionEn: '', descriptionAr: '',
-  price: '', discountPrice: '', isOnSale: false, image: '', categoryId: '', featured: false,
+  price: '', discountPrice: '', isOnSale: false, image: '', categoryId: '', featured: false, outOfStock: false,
 };
 
 export default function AdminProductsPage() {
@@ -84,6 +85,7 @@ export default function AdminProductsPage() {
       image: product.image || '',
       categoryId: product.categoryId?.toString() || '',
       featured: product.featured || false,
+      outOfStock: product.outOfStock || false,
     });
     setModalOpen(true);
   };
@@ -197,6 +199,11 @@ export default function AdminProductsPage() {
                       <div className="flex items-center gap-2">
                         {product.featured && <Star className="w-4 h-4 text-accent-500 fill-accent-500" />}
                         {product.isOnSale && <Sparkles className="w-4 h-4 text-red-500 fill-red-500" />}
+                        {product.outOfStock && (
+                          <span className="px-2 py-0.5 text-xs bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 font-bold rounded">
+                            {ct('outOfStock')}
+                          </span>
+                        )}
                       </div>
                     </td>
                     <td className="p-4 text-end">
@@ -281,17 +288,30 @@ export default function AdminProductsPage() {
             value={form.categoryId}
             onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
           />
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={form.featured}
-              onChange={(e) => setForm({ ...form, featured: e.target.checked })}
-              className="w-4 h-4 rounded border-neutral-300 dark:border-neutral-700 text-primary-600 focus:ring-primary-500"
-            />
-            <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-              {ct('featured')}
-            </span>
-          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-neutral-100 dark:border-neutral-800 pb-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.featured}
+                onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+                className="w-4 h-4 rounded border-neutral-300 dark:border-neutral-700 text-primary-600 focus:ring-primary-500"
+              />
+              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                {ct('featured')}
+              </span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.outOfStock}
+                onChange={(e) => setForm({ ...form, outOfStock: e.target.checked })}
+                className="w-4 h-4 rounded border-neutral-300 dark:border-neutral-700 text-red-600 focus:ring-red-500"
+              />
+              <span className="text-sm font-medium text-red-600 dark:text-red-400 font-bold">
+                {ct('outOfStock')}
+              </span>
+            </label>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-neutral-100 dark:border-neutral-800 pt-4">
             <label className="flex items-center gap-2 cursor-pointer">

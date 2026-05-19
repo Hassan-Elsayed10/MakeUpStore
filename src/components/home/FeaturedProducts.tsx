@@ -20,6 +20,7 @@ interface Product {
   image: string | null;
   categoryId: number | null;
   featured: boolean | null;
+  outOfStock: boolean | null;
 }
 
 export function FeaturedProducts({ products }: { products: Product[] }) {

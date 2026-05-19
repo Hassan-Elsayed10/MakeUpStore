@@ -32,6 +32,7 @@ export const products = pgTable('products', {
   image: text('image'),
   categoryId: integer('category_id').references(() => categories.id, { onDelete: 'set null' }),
   featured: boolean('featured').default(false),
+  outOfStock: boolean('out_of_stock').default(false),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
@@ -61,8 +62,8 @@ export const cartItems = pgTable('cart_items', {
 export const orders = pgTable('orders', {
   id: serial('id').primaryKey(),
   customerName: text('customer_name').notNull(),
-  customerEmail: text('customer_email').notNull(),
-  customerPhone: text('customer_phone'),
+  customerAddress: text('customer_address').notNull(),
+  customerPhone: text('customer_phone').notNull(),
   status: text('status').notNull().default('pending'),
   total: numeric('total', { precision: 10, scale: 2 }).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),

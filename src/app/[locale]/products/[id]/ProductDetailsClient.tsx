@@ -54,6 +54,7 @@ export function ProductDetailsClient({
     : parseFloat(product.price);
 
   const handleAddToCart = () => {
+    if (product.outOfStock) return;
     for (let i = 0; i < qty; i++) {
       addItem({
         productId: product.id,
@@ -167,7 +168,7 @@ export function ProductDetailsClient({
               </div>
             )}
 
-            <div className="mb-6">
+            <div className="mb-6 flex items-center gap-4">
               {product.isOnSale && product.discountPrice ? (
                 <div className="flex items-center gap-3">
                   <span className="text-3xl font-bold text-red-600 dark:text-red-400">
@@ -182,6 +183,11 @@ export function ProductDetailsClient({
                   {formatPrice(product.price)}
                 </p>
               )}
+              {product.outOfStock && (
+                <span className="px-3 py-1 bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-sm font-semibold rounded-full">
+                  {t('outOfStock')}
+                </span>
+              )}
             </div>
 
             {description && (
@@ -192,7 +198,7 @@ export function ProductDetailsClient({
 
             {/* Quantity + Actions */}
             <div className="flex flex-wrap items-center gap-4 mb-6">
-              {cartEnabled && (
+              {cartEnabled && !product.outOfStock && (
                 <div className="flex items-center border border-neutral-300 dark:border-neutral-700 rounded-lg">
                   <button
                     onClick={() => setQty(Math.max(1, qty - 1))}
@@ -215,9 +221,14 @@ export function ProductDetailsClient({
 
             <div className="flex flex-wrap gap-3">
               {cartEnabled && (
-                <Button size="lg" onClick={handleAddToCart} className="flex-1 min-w-[200px]">
+                <Button
+                  size="lg"
+                  onClick={handleAddToCart}
+                  disabled={product.outOfStock}
+                  className="flex-1 min-w-[200px]"
+                >
                   <ShoppingBag className="w-5 h-5" />
-                  {t('addToCart')}
+                  {product.outOfStock ? t('outOfStock') : t('addToCart')}
                 </Button>
               )}
               <Button

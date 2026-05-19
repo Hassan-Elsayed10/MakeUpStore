@@ -22,6 +22,7 @@ interface Product {
   image: string | null;
   categoryId: number | null;
   featured: boolean | null;
+  outOfStock: boolean | null;
 }
 
 export function ProductCard({ product, locale }: { product: Product; locale: string }) {
@@ -38,6 +39,7 @@ export function ProductCard({ product, locale }: { product: Product; locale: str
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (product.outOfStock) return;
     const effectivePrice = product.isOnSale && product.discountPrice
       ? parseFloat(product.discountPrice)
       : parseFloat(product.price);
@@ -79,6 +81,14 @@ export function ProductCard({ product, locale }: { product: Product; locale: str
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Sparkles className="w-16 h-16 text-primary-300 dark:text-primary-700" />
+            </div>
+          )}
+
+          {product.outOfStock && (
+            <div className="absolute inset-0 bg-neutral-950/50 backdrop-blur-[1px] z-10 flex items-center justify-center">
+              <span className="px-3 py-1.5 bg-red-600 text-white text-xs font-bold rounded-lg uppercase tracking-wider">
+                {t('outOfStock')}
+              </span>
             </div>
           )}
 
@@ -138,9 +148,14 @@ export function ProductCard({ product, locale }: { product: Product; locale: str
             </div>
             {cartEnabled && (
               <motion.button
-                whileTap={{ scale: 0.9 }}
+                whileTap={product.outOfStock ? undefined : { scale: 0.9 }}
                 onClick={handleAddToCart}
-                className="p-2 rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-colors"
+                disabled={!!product.outOfStock}
+                className={`p-2 rounded-lg transition-colors ${
+                  product.outOfStock
+                    ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-600 cursor-not-allowed'
+                    : 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/50'
+                }`}
               >
                 <ShoppingBag className="w-4 h-4" />
               </motion.button>

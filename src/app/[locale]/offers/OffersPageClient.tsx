@@ -17,6 +17,7 @@ interface Product {
   image: string | null;
   categoryId: number | null;
   featured: boolean | null;
+  outOfStock: boolean | null;
 }
 
 export function OffersPageClient({ products }: { products: Product[] }) {

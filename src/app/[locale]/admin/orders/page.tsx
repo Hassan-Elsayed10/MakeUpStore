@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useToast } from '@/providers/ToastProvider';
 import { formatPrice } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Eye, X, User, Mail, Phone, ShoppingBag, Search } from 'lucide-react';
+import { Package, Eye, X, User, MapPin, Phone, ShoppingBag, Search } from 'lucide-react';
 
 interface OrderItem {
   id: number;
@@ -21,8 +21,8 @@ interface OrderItem {
 interface Order {
   id: number;
   customerName: string;
-  customerEmail: string;
-  customerPhone: string | null;
+  customerAddress: string;
+  customerPhone: string;
   status: string;
   total: string;
   createdAt: string;
@@ -87,15 +87,13 @@ function OrderDetailsModal({ order, onClose }: { order: Order; onClose: () => vo
                   <span className="text-neutral-900 dark:text-white">{order.customerName}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <Mail className="w-4 h-4 text-neutral-400 flex-shrink-0" />
-                  <span className="text-neutral-600 dark:text-neutral-400">{order.customerEmail}</span>
+                  <MapPin className="w-4 h-4 text-neutral-400 flex-shrink-0" />
+                  <span className="text-neutral-600 dark:text-neutral-400">{order.customerAddress}</span>
                 </div>
-                {order.customerPhone && (
-                  <div className="flex items-center gap-3 text-sm">
-                    <Phone className="w-4 h-4 text-neutral-400 flex-shrink-0" />
-                    <span className="text-neutral-600 dark:text-neutral-400">{order.customerPhone}</span>
-                  </div>
-                )}
+                <div className="flex items-center gap-3 text-sm">
+                  <Phone className="w-4 h-4 text-neutral-400 flex-shrink-0" />
+                  <span className="text-neutral-600 dark:text-neutral-400">{order.customerPhone}</span>
+                </div>
               </div>
             </div>
 
@@ -238,7 +236,7 @@ export default function AdminOrdersPage() {
                 <tr className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
                   <th className="text-start p-4 font-medium text-neutral-500">{ct('id')}</th>
                   <th className="text-start p-4 font-medium text-neutral-500">{ct('customer')}</th>
-                  <th className="text-start p-4 font-medium text-neutral-500">{ct('email')}</th>
+                  <th className="text-start p-4 font-medium text-neutral-500">{ct('address')}</th>
                   <th className="text-start p-4 font-medium text-neutral-500">{ct('total')}</th>
                   <th className="text-start p-4 font-medium text-neutral-500">{t('orderStatus')}</th>
                   <th className="text-start p-4 font-medium text-neutral-500">{ct('date')}</th>
@@ -258,7 +256,7 @@ export default function AdminOrdersPage() {
                     <td className="p-4 font-medium text-neutral-900 dark:text-white">
                       {order.customerName}
                     </td>
-                    <td className="p-4 text-neutral-500">{order.customerEmail}</td>
+                    <td className="p-4 text-neutral-500">{order.customerAddress}</td>
                     <td className="p-4 font-medium text-primary-600 dark:text-primary-400">
                       {formatPrice(order.total)}
                     </td>

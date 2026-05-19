@@ -20,12 +20,20 @@ export default function CartPage() {
   const { items, removeItem, updateQuantity, clearCart, totalPrice } = useCart();
 
   const [showCheckout, setShowCheckout] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', phone: '' });
+  const [form, setForm] = useState({ name: '', address: '', phone: '' });
   const [submitting, setSubmitting] = useState(false);
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.email.trim()) return;
+    if (!form.name.trim() || !form.address.trim() || !form.phone.trim()) return;
+
+    // Validate phone number format (between 10 and 15 digits, allowing leading +)
+    const phoneRegex = /^\+?[0-9\s-]{10,15}$/;
+    if (!phoneRegex.test(form.phone.trim().replace(/\s+/g, ''))) {
+      alert(locale === 'ar' ? 'يرجى إدخال رقم هاتف صالح' : 'Please enter a valid phone number');
+      return;
+    }
+
     setSubmitting(true);
 
     let orderNumber = '';
@@ -35,7 +43,7 @@ export default function CartPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customerName: form.name,
-          customerEmail: form.email,
+          customerAddress: form.address,
           customerPhone: form.phone,
           items: items.map((i) => ({
             productId: i.productId,
@@ -60,8 +68,8 @@ export default function CartPage() {
       orderNumber ? `📋 *رقم الطلب / Order No:* ${orderNumber}` : '',
       '',
       `👤 *الاسم / Name:* ${form.name}`,
-      `📧 *البريد / Email:* ${form.email}`,
-      form.phone ? `📞 *الهاتف / Phone:* ${form.phone}` : '',
+      `📍 *العنوان / Address:* ${form.address}`,
+      `📞 *الهاتف / Phone:* ${form.phone}`,
       '',
       '*المنتجات / Items:*',
       itemLines,
@@ -199,10 +207,10 @@ export default function CartPage() {
                         required
                       />
                       <Input
-                        type="email"
-                        placeholder={cht('email')}
-                        value={form.email}
-                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                        type="text"
+                        placeholder={cht('address')}
+                        value={form.address}
+                        onChange={(e) => setForm({ ...form, address: e.target.value })}
                         required
                       />
                       <Input
@@ -210,6 +218,7 @@ export default function CartPage() {
                         placeholder={cht('phone')}
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                        required
                       />
                       <Button type="submit" className="w-full" disabled={submitting}>
                         {t('placeOrder')}

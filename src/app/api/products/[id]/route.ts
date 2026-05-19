@@ -42,7 +42,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { nameEn, nameAr, descriptionEn, descriptionAr, price, discountPrice, isOnSale, image, categoryId, featured } = body;
+    const { nameEn, nameAr, descriptionEn, descriptionAr, price, discountPrice, isOnSale, image, categoryId, featured, outOfStock } = body;
 
     const updated = await db
       .update(products)
@@ -57,6 +57,7 @@ export async function PUT(
         ...(image !== undefined && { image: image ? String(image).trim() : null }),
         ...(categoryId !== undefined && { categoryId: categoryId ? parseInt(categoryId) : null }),
         ...(featured !== undefined && { featured: Boolean(featured) }),
+        ...(outOfStock !== undefined && { outOfStock: Boolean(outOfStock) }),
       })
       .where(eq(products.id, productId))
       .returning();
