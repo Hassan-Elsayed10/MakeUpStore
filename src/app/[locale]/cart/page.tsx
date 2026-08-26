@@ -6,6 +6,7 @@ import { useCart } from '@/providers/CartProvider';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { formatPrice } from '@/lib/utils';
+import { useToast } from '@/providers/ToastProvider';
 import { motion } from 'framer-motion';
 import { ShoppingBag, Trash2, Plus, Minus, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
@@ -18,6 +19,7 @@ export default function CartPage() {
   const cht = useTranslations('checkout');
   const locale = useLocale();
   const { items, removeItem, updateQuantity, clearCart, totalPrice } = useCart();
+  const { showToast } = useToast();
 
   const [showCheckout, setShowCheckout] = useState(false);
   const [form, setForm] = useState({ name: '', address: '', phone: '' });
@@ -25,12 +27,14 @@ export default function CartPage() {
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.address.trim() || !form.phone.trim()) return;
+    if (items.length === 0 || !form.name.trim() || !form.address.trim() || !form.phone.trim()) {
+      return;
+    }
 
     // Validate phone number format (between 10 and 15 digits, allowing leading +)
     const phoneRegex = /^\+?[0-9\s-]{10,15}$/;
     if (!phoneRegex.test(form.phone.trim().replace(/\s+/g, ''))) {
-      alert(locale === 'ar' ? 'يرجى إدخال رقم هاتف صالح' : 'Please enter a valid phone number');
+      showToast(locale === 'ar' ? 'يرجى إدخال رقم هاتف صالح' : 'Please enter a valid phone number', 'error');
       return;
     }
 
@@ -56,8 +60,17 @@ export default function CartPage() {
       if (res.ok) {
         const data = await res.json();
         orderNumber = `#${data.order.id}`;
+      } else {
+        const data = await res.json().catch(() => ({}));
+        showToast(data.error || (locale === 'ar' ? 'تعذر إنشاء الطلب' : 'Unable to create order'), 'error');
+        return;
       }
-    } catch {}
+    } catch {
+      showToast(locale === 'ar' ? 'تعذر إنشاء الطلب' : 'Unable to create order', 'error');
+      return;
+    } finally {
+      setSubmitting(false);
+    }
 
     const itemLines = items
       .map((i) => `• ${locale === 'ar' ? i.nameAr : i.nameEn} x${i.quantity} = ${formatPrice(i.price * i.quantity)}`)
@@ -82,7 +95,6 @@ export default function CartPage() {
     const url = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(message)}`;
     clearCart();
     setShowCheckout(false);
-    setSubmitting(false);
     window.open(url, '_blank');
   };
 
@@ -141,18 +153,21 @@ export default function CartPage() {
                     <p className="text-sm text-primary-600 dark:text-primary-400 font-semibold mt-1">
                       {formatPrice(item.price)}
                     </p>
+                    {item.variantName && (
+                      <p className="text-xs text-neutral-500 mt-1">{ct('variant')}: {item.variantName}</p>
+                    )}
 
                     <div className="flex items-center gap-3 mt-2">
                       <div className="flex items-center border border-neutral-300 dark:border-neutral-700 rounded-lg">
                         <button
-                          onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.productId, item.quantity - 1, item.variantId)}
                           className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
                         <span className="px-3 text-sm font-medium">{item.quantity}</span>
                         <button
-                          onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.productId, item.quantity + 1, item.variantId)}
                           className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                         >
                           <Plus className="w-3.5 h-3.5" />
@@ -160,7 +175,7 @@ export default function CartPage() {
                       </div>
 
                       <button
-                        onClick={() => removeItem(item.productId)}
+                        onClick={() => removeItem(item.productId, item.variantId)}
                         className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950 rounded-lg transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />

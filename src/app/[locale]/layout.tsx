@@ -13,76 +13,105 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import '@/app/globals.css';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://almulklillah.com';
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: 'الْمُلْكُ للهِ - Premium Makeup & Luxury Cosmetics',
-    template: '%s | الْمُلْكُ للهِ',
-  },
-  description: 'Discover our premium selection of luxury makeup and cosmetic products. Curated for every skin tone, style, and beauty enthusiast.',
-  keywords: ['makeup', 'cosmetics', 'luxury beauty', 'premium skincare', 'lipstick', 'foundation', 'beauty store', 'مكياج', 'مستحضرات تجميل', 'الْمُلْكُ للهِ'],
-  authors: [{ name: 'الْمُلْكُ للهِ Beauty' }],
-  creator: 'الْمُلْكُ للهِ',
-  publisher: 'الْمُلْكُ للهِ',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  alternates: {
-    canonical: '/',
-    languages: {
-      'en': '/en',
-      'ar': '/ar',
-    },
-  },
-  openGraph: {
-    title: 'الْمُلْكُ للهِ - Premium Makeup Store',
-    description: 'Premium makeup products crafted for every skin tone and style.',
-    url: '/',
-    siteName: 'الْمُلْكُ للهِ',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'الْمُلْكُ للهِ - Premium Makeup Store',
-      },
-    ],
-    locale: 'en_US',
-    alternateLocale: 'ar_SA',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'الْمُلْكُ للهِ - Premium Makeup Store',
-    description: 'Premium makeup products crafted for every skin tone and style.',
-    images: ['/og-image.png'],
-    creator: '@almulklillah',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
+type Props = {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
 };
 
-export default async function LocaleLayout({
-  children,
-  params,
-}: {
-  children: ReactNode;
-  params: { locale: string };
-}) {
-  const { locale } = params;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isArabic = locale === 'ar';
+
+  const title = isArabic
+    ? 'الْمُلْكُ للهِ - مستحضرات تجميل ومكياج فاخر'
+    : 'الْمُلْكُ للهِ - Premium Makeup & Luxury Cosmetics';
+
+  const description = isArabic
+    ? 'اكتشفي تشكيلتنا الفاخرة من مستحضرات التجميل والمكياج العالي الجودة. صممت لتناسب جميع ألوان البشرة والأذواق.'
+    : 'Discover our premium selection of luxury makeup and cosmetic products. Curated for every skin tone, style, and beauty enthusiast.';
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: title,
+      template: isArabic ? '%s | الْمُلْكُ للهِ' : '%s | الْمُلْكُ للهِ',
+    },
+    description,
+    keywords: [
+      'makeup',
+      'cosmetics',
+      'luxury beauty',
+      'premium skincare',
+      'lipstick',
+      'foundation',
+      'beauty store',
+      'مكياج',
+      'مستحضرات تجميل',
+      'عناية بالبشرة',
+      'الْمُلْكُ للهِ',
+    ],
+    authors: [{ name: 'الْمُلْكُ للهِ Beauty' }],
+    creator: 'الْمُلْكُ للهِ',
+    publisher: 'الْمُلْكُ للهِ',
+    icons: {
+      icon: [{ url: '/favicon.ico' }, { url: '/logo.png', type: 'image/png' }],
+      apple: '/apple-icon.png',
+    },
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    alternates: {
+      canonical: `/${locale}`,
+      languages: {
+        en: '/en',
+        ar: '/ar',
+        'x-default': '/en',
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/${locale}`,
+      siteName: 'الْمُلْكُ للهِ',
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: isArabic ? 'الْمُلْكُ للهِ - متجر مكياج فاخر' : 'الْمُلْكُ للهِ - Premium Makeup Store',
+        },
+      ],
+      locale: isArabic ? 'ar_SA' : 'en_US',
+      alternateLocale: isArabic ? 'en_US' : 'ar_SA',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/og-image.png'],
+      creator: '@almulklillah',
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+  };
+}
+
+export default async function LocaleLayout({ children, params }: Props) {
+  const { locale } = await params;
 
   if (!routing.locales.includes(locale as any)) {
     notFound();
@@ -90,8 +119,30 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
 
+  // Structured Data (JSON-LD) for E-Commerce / Local Store
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BeautyStore',
+    name: 'الْمُلْكُ للهِ',
+    url: `${siteUrl}/${locale}`,
+    logo: `${siteUrl}/logo.png`,
+    image: `${siteUrl}/og-image.png`,
+    description:
+      locale === 'ar'
+        ? 'متجر فاخر لمستحضرات التجميل والمكياج العالي الجودة.'
+        : 'Premium luxury makeup and cosmetics store.',
+    priceRange: '$$$',
+    knowsLanguage: ['en', 'ar'],
+  };
+
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col antialiased">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>

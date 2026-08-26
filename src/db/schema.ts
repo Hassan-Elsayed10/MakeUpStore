@@ -36,6 +36,17 @@ export const products = pgTable('products', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
+// Product variants
+export const productVariants = pgTable('product_variants', {
+  id: serial('id').primaryKey(),
+  productId: integer('product_id')
+    .references(() => products.id, { onDelete: 'cascade' })
+    .notNull(),
+  name: text('name').notNull(),
+  price: numeric('price', { precision: 10, scale: 2 }).notNull(),
+  outOfStock: boolean('out_of_stock').default(false),
+});
+
 // Reviews
 export const reviews = pgTable('reviews', {
   id: serial('id').primaryKey(),
@@ -77,6 +88,8 @@ export const orderItems = pgTable('order_items', {
     .notNull(),
   productId: integer('product_id')
     .references(() => products.id, { onDelete: 'set null' }),
+  variantId: integer('variant_id')
+    .references(() => productVariants.id, { onDelete: 'set null' }),
   quantity: integer('quantity').notNull(),
   price: numeric('price', { precision: 10, scale: 2 }).notNull(),
 });
@@ -109,6 +122,14 @@ export const productsRelations = relations(products, ({ one, many }) => ({
     references: [categories.id],
   }),
   reviews: many(reviews),
+  variants: many(productVariants),
+}));
+
+export const productVariantsRelations = relations(productVariants, ({ one }) => ({
+  product: one(products, {
+    fields: [productVariants.productId],
+    references: [products.id],
+  }),
 }));
 
 export const reviewsRelations = relations(reviews, ({ one }) => ({
@@ -130,5 +151,9 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
   product: one(products, {
     fields: [orderItems.productId],
     references: [products.id],
+  }),
+  variant: one(productVariants, {
+    fields: [orderItems.variantId],
+    references: [productVariants.id],
   }),
 }));

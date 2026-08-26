@@ -24,6 +24,14 @@ interface Product {
   categoryId: number | null;
   featured: boolean | null;
   outOfStock: boolean | null;
+  variants: ProductVariant[];
+}
+
+interface ProductVariant {
+  id?: number;
+  name: string;
+  price: string;
+  outOfStock: boolean | null;
 }
 
 interface Category {
@@ -36,6 +44,7 @@ interface Category {
 const emptyForm = {
   nameEn: '', nameAr: '', descriptionEn: '', descriptionAr: '',
   price: '', discountPrice: '', isOnSale: false, image: '', categoryId: '', featured: false, outOfStock: false,
+  variants: [] as ProductVariant[],
 };
 
 export default function AdminProductsPage() {
@@ -86,6 +95,7 @@ export default function AdminProductsPage() {
       categoryId: product.categoryId?.toString() || '',
       featured: product.featured || false,
       outOfStock: product.outOfStock || false,
+      variants: product.variants || [],
     });
     setModalOpen(true);
   };
@@ -277,6 +287,64 @@ export default function AdminProductsPage() {
             onChange={(e) => setForm({ ...form, price: e.target.value })}
             required
           />
+          <div className="border-t border-neutral-100 dark:border-neutral-800 pt-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">{t('variants.title')}</h3>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, variants: [...form.variants, { name: '', price: '', outOfStock: false }] })}
+                className="text-sm font-medium text-primary-600 hover:text-primary-700"
+              >
+                + {t('variants.add')}
+              </button>
+            </div>
+            <div className="space-y-3">
+              {form.variants.map((variant, index) => (
+                <div key={variant.id || index} className="grid grid-cols-[1fr_6rem_auto] gap-2 items-end">
+                  <Input
+                    label={index === 0 ? t('variants.name') : undefined}
+                    value={variant.name}
+                    onChange={(e) => setForm({
+                      ...form,
+                      variants: form.variants.map((item, i) => i === index ? { ...item, name: e.target.value } : item),
+                    })}
+                    placeholder={t('variants.example')}
+                  />
+                  <Input
+                    label={index === 0 ? t('variants.price') : undefined}
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={variant.price}
+                    onChange={(e) => setForm({
+                      ...form,
+                      variants: form.variants.map((item, i) => i === index ? { ...item, price: e.target.value } : item),
+                    })}
+                    placeholder="0.00"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setForm({ ...form, variants: form.variants.filter((_, i) => i !== index) })}
+                    className="p-2 mb-0.5 text-red-500 hover:bg-red-50 rounded-lg"
+                    aria-label={ct('remove')}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                  <label className="col-span-3 flex items-center gap-2 text-xs text-neutral-500">
+                    <input
+                      type="checkbox"
+                      checked={!!variant.outOfStock}
+                      onChange={(e) => setForm({
+                        ...form,
+                        variants: form.variants.map((item, i) => i === index ? { ...item, outOfStock: e.target.checked } : item),
+                      })}
+                    />
+                    {t('variants.outOfStock')}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
           <ImageUpload
             label={t('productImage')}
             value={form.image}

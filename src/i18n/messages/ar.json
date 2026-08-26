@@ -54,6 +54,8 @@
     "author": "الكاتب",
     "comment": "التعليق",
     "rating": "التقييم",
+    "variant": "الخيار",
+    "variants": "الخيارات",
     "reviews": "التقييمات"
   },
   "home": {
@@ -202,6 +204,14 @@
     "adminPanel": "لوحة تحكم المشرف",
     "checkingAccess": "جاري التحقق من الوصول...",
     "offerPrice": "سعر العرض",
+    "variants": {
+      "title": "الخيارات",
+      "add": "إضافة خيار",
+      "name": "اسم الخيار",
+      "price": "سعر الخيار",
+      "example": "مثال: أحمر",
+      "outOfStock": "الخيار نفد من المخزن"
+    },
     "productImage": "صورة المنتج",
     "categoryImage": "صورة الفئة",
     "searchOrders": "بحث برقم الطلب...",

@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { products } from '@/db/schema';
+import { products, productVariants } from '@/db/schema';
 import { desc } from 'drizzle-orm';
 
 export const maxDuration = 30;
 
 export async function GET() {
   try {
-    const allProducts = await db.select().from(products).orderBy(desc(products.createdAt));
+    const allProducts = await db.query.products.findMany({
+      with: { variants: true },
+      orderBy: [desc(products.createdAt)],
+    });
     return NextResponse.json({ products: allProducts });
   } catch (error) {
     console.error('[GET /api/products]', error);
@@ -18,15 +21,14 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { nameEn, nameAr, descriptionEn, descriptionAr, price, discountPrice, isOnSale, image, categoryId, featured, outOfStock } = body;
+    const { nameEn, nameAr, descriptionEn, descriptionAr, price, discountPrice, isOnSale, image, categoryId, featured, outOfStock, variants } = body;
 
     if (!nameEn || !nameAr || !price) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const newProduct = await db
-      .insert(products)
-      .values({
+    const newProduct = await db.transaction(async (tx) => {
+      const [product] = await tx.insert(products).values({
         nameEn: String(nameEn).trim(),
         nameAr: String(nameAr).trim(),
         descriptionEn: descriptionEn ? String(descriptionEn).trim() : null,
@@ -38,10 +40,21 @@ export async function POST(request: NextRequest) {
         categoryId: categoryId ? parseInt(categoryId) : null,
         featured: Boolean(featured),
         outOfStock: Boolean(outOfStock),
-      })
-      .returning();
+      }).returning();
 
-    return NextResponse.json({ product: newProduct[0] }, { status: 201 });
+      if (Array.isArray(variants) && variants.length > 0) {
+        await tx.insert(productVariants).values(variants.map((variant) => ({
+          productId: product.id,
+          name: String(variant.name).trim(),
+          price: String(parseFloat(variant.price)),
+          outOfStock: Boolean(variant.outOfStock),
+        })));
+      }
+
+      return product;
+    });
+
+    return NextResponse.json({ product: newProduct }, { status: 201 });
   } catch (error) {
     console.error('[POST /api/products]', error);
     return NextResponse.json({ error: String(error) }, { status: 500 });

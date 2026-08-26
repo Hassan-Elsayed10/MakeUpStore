@@ -26,7 +26,7 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/80 dark:bg-neutral-950/80 backdrop-blur-lg border-b border-neutral-200 dark:border-neutral-800">
+    <header className="sticky top-0 z-50 w-full bg-white dark:bg-black backdrop-blur-lg border-b border-neutral-200 dark:border-neutral-800">
       <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -40,7 +40,7 @@ export function Header() {
               className="w-40 h-20 dark:hidden"
             />
             <img
-              src="/darklogo.png"
+              src="/black.jpeg"
               alt="الْمُلْكُ للهِ Dark Logo"
               className="w-40 h-20 hidden dark:block"
             />

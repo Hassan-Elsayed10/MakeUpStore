@@ -1,5 +1,5 @@
 import { db } from '@/db';
-import { products, reviews, categories } from '@/db/schema';
+import { products, reviews, categories, productVariants } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { ProductDetailsClient } from './ProductDetailsClient';
@@ -90,6 +90,10 @@ export default async function ProductPage({ params }: Props) {
 
     if (result.length === 0) notFound();
     product = result[0];
+    product.variants = await db
+      .select()
+      .from(productVariants)
+      .where(eq(productVariants.productId, productId));
 
     productReviews = await db
       .select()

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { products } from '@/db/schema';
+import { products, productVariants } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
 export async function GET(
@@ -14,17 +14,16 @@ export async function GET(
       return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
     }
 
-    const product = await db
-      .select()
-      .from(products)
-      .where(eq(products.id, productId))
-      .limit(1);
+    const product = await db.query.products.findFirst({
+      where: eq(products.id, productId),
+      with: { variants: true },
+    });
 
-    if (product.length === 0) {
+    if (!product) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ product: product[0] });
+    return NextResponse.json({ product });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 });
   }
@@ -42,7 +41,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { nameEn, nameAr, descriptionEn, descriptionAr, price, discountPrice, isOnSale, image, categoryId, featured, outOfStock } = body;
+    const { nameEn, nameAr, descriptionEn, descriptionAr, price, discountPrice, isOnSale, image, categoryId, featured, outOfStock, variants } = body;
 
     const updated = await db
       .update(products)
@@ -64,6 +63,18 @@ export async function PUT(
 
     if (updated.length === 0) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    }
+
+    if (Array.isArray(variants)) {
+      await db.delete(productVariants).where(eq(productVariants.productId, productId));
+      if (variants.length > 0) {
+        await db.insert(productVariants).values(variants.map((variant) => ({
+          productId,
+          name: String(variant.name).trim(),
+          price: String(parseFloat(variant.price)),
+          outOfStock: Boolean(variant.outOfStock),
+        })));
+      }
     }
 
     return NextResponse.json({ product: updated[0] });

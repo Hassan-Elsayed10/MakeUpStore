@@ -11,6 +11,7 @@ interface OrderItem {
   id: number;
   quantity: number;
   price: string;
+  variant?: { name: string } | null;
   product: {
     nameEn: string;
     nameAr: string;
@@ -134,6 +135,9 @@ function OrderDetailsModal({ order, onClose }: { order: Order; onClose: () => vo
                       <p className="text-xs text-neutral-500">
                         {formatPrice(item.price)} × {item.quantity}
                       </p>
+                      {item.variant?.name && (
+                        <p className="text-xs text-neutral-500">{ct('variant')}: {item.variant.name}</p>
+                      )}
                     </div>
                     <p className="text-sm font-semibold text-primary-600 dark:text-primary-400 flex-shrink-0">
                       {formatPrice(parseFloat(item.price) * item.quantity)}

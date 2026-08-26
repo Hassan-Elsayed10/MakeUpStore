@@ -54,6 +54,8 @@
     "author": "Author",
     "comment": "Comment",
     "rating": "Rating",
+    "variant": "Variant",
+    "variants": "Variants",
     "reviews": "Reviews"
   },
   "home": {
@@ -202,6 +204,14 @@
     "adminPanel": "Admin Control Panel",
     "checkingAccess": "Checking access...",
     "offerPrice": "Offer Price",
+    "variants": {
+      "title": "Variants",
+      "add": "Add variant",
+      "name": "Variant name",
+      "price": "Variant price",
+      "example": "Example: Red",
+      "outOfStock": "Variant out of stock"
+    },
     "productImage": "Product Image",
     "categoryImage": "Category Image",
     "searchOrders": "Search by order ID...",

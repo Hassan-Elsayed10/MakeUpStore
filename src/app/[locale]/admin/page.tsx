@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import { products, categories, orders } from '@/db/schema';
-import { count, sum } from 'drizzle-orm';
+import { count, eq, sum } from 'drizzle-orm';
 import { AdminDashboardClient } from './AdminDashboardClient';
 
 export default async function AdminPage() {
@@ -10,7 +10,10 @@ export default async function AdminPage() {
     const [productCount] = await db.select({ value: count() }).from(products);
     const [categoryCount] = await db.select({ value: count() }).from(categories);
     const [orderCount] = await db.select({ value: count() }).from(orders);
-    const [revenueSum] = await db.select({ value: sum(orders.total) }).from(orders);
+    const [revenueSum] = await db
+      .select({ value: sum(orders.total) })
+      .from(orders)
+      .where(eq(orders.status, 'delivered'));
 
     stats = {
       products: productCount.value,

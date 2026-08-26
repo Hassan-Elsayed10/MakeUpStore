@@ -37,6 +37,9 @@ export function ProductDetailsClient({
   const { cartEnabled } = useFeatureFlags();
   const { showToast } = useToast();
   const [qty, setQty] = useState(1);
+  const [selectedVariantId, setSelectedVariantId] = useState<number | undefined>(
+    product.variants?.find((variant: any) => !variant.outOfStock)?.id
+  );
   const [reviewForm, setReviewForm] = useState({ author: '', rating: 5, comment: '' });
   const [submittingReview, setSubmittingReview] = useState(false);
   const [allReviews, setAllReviews] = useState(reviews);
@@ -52,15 +55,19 @@ export function ProductDetailsClient({
   const effectivePrice = product.isOnSale && product.discountPrice
     ? parseFloat(product.discountPrice)
     : parseFloat(product.price);
+  const selectedVariant = product.variants?.find((variant: any) => variant.id === selectedVariantId);
+  const purchasePrice = selectedVariant ? parseFloat(selectedVariant.price) : effectivePrice;
 
   const handleAddToCart = () => {
-    if (product.outOfStock) return;
+    if (product.outOfStock || selectedVariant?.outOfStock || (product.variants?.length > 0 && !selectedVariant)) return;
     for (let i = 0; i < qty; i++) {
       addItem({
         productId: product.id,
+        variantId: selectedVariant?.id,
+        variantName: selectedVariant?.name,
         nameEn: product.nameEn,
         nameAr: product.nameAr,
-        price: effectivePrice,
+        price: purchasePrice,
         image: product.image,
       });
     }
@@ -196,6 +203,23 @@ export function ProductDetailsClient({
               </p>
             )}
 
+            {product.variants?.length > 0 && (
+              <label className="mb-6 block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                {t('variant')}
+                <select
+                  value={selectedVariantId ?? ''}
+                  onChange={(e) => setSelectedVariantId(Number(e.target.value))}
+                  className="mt-2 block w-full rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-2 text-sm"
+                >
+                  {product.variants.map((variant: any) => (
+                    <option key={variant.id} value={variant.id} disabled={variant.outOfStock}>
+                      {variant.name} - {formatPrice(variant.price)}{variant.outOfStock ? ` (${t('outOfStock')})` : ''}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+
             {/* Quantity + Actions */}
             <div className="flex flex-wrap items-center gap-4 mb-6">
               {cartEnabled && !product.outOfStock && (
@@ -224,11 +248,11 @@ export function ProductDetailsClient({
                 <Button
                   size="lg"
                   onClick={handleAddToCart}
-                  disabled={product.outOfStock}
+                  disabled={product.outOfStock || selectedVariant?.outOfStock || (product.variants?.length > 0 && !selectedVariant)}
                   className="flex-1 min-w-[200px]"
                 >
                   <ShoppingBag className="w-5 h-5" />
-                  {product.outOfStock ? t('outOfStock') : t('addToCart')}
+                  {product.outOfStock || selectedVariant?.outOfStock ? t('outOfStock') : t('addToCart')}
                 </Button>
               )}
               <Button

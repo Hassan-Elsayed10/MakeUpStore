@@ -56,7 +56,7 @@ export function Categories({ categories }: { categories: Category[] }) {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
           {categories.map((category, index) => {
             const gradient = categoryColors[category.slug] || 'from-primary-500/20 to-accent-500/20';
             return (
@@ -70,7 +70,7 @@ export function Categories({ categories }: { categories: Category[] }) {
               >
                 <Link
                   href={`/products?category=${category.slug}`}
-                  className="group relative block aspect-[16/10] sm:aspect-[16/9] lg:aspect-[4/3] rounded-[2rem] overflow-hidden border border-neutral-200/50 dark:border-neutral-800/50 hover:border-primary-400 dark:hover:border-primary-600 transition-all duration-700 hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)] hover:-translate-y-2"
+                  className="group relative block aspect-square sm:aspect-[16/9] lg:aspect-[4/3] rounded-xl sm:rounded-[2rem] overflow-hidden border border-neutral-200/50 dark:border-neutral-800/50 hover:border-primary-400 dark:hover:border-primary-600 transition-all duration-700 hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)] hover:-translate-y-2"
                 >
                   {/* Background Image or Gradient */}
                   {category.image ? (
@@ -88,16 +88,16 @@ export function Categories({ categories }: { categories: Category[] }) {
                   <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-900/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
 
                   {/* Content */}
-                  <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end">
-                    <div className="absolute top-6 end-6 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0">
+                  <div className="absolute inset-0 p-3 sm:p-8 flex flex-col justify-end">
+                    <div className="absolute top-3 end-3 sm:top-6 sm:end-6 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0">
                       <ArrowUpRight className="w-5 h-5 text-white" />
                     </div>
 
                     <div className="transform transition-transform duration-500 group-hover:-translate-y-1">
-                      <h3 className="text-xl sm:text-2xl font-bold text-white font-display">
+                      <h3 className="text-sm sm:text-2xl font-bold text-white font-display">
                         {getLocalizedField(category, 'name', locale)}
                       </h3>
-                      <p className="text-white/60 text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                      <p className="text-white/60 text-xs sm:text-sm mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                         {t('exploreCollection')}
                       </p>
                     </div>

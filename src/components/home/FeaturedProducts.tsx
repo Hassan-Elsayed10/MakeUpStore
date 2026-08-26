@@ -89,7 +89,7 @@ export function FeaturedProducts({ products }: { products: Product[] }) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-50px' }}
             transition={{ delay: index * 0.08, duration: 0.5 }}
-            className="min-w-[280px] max-w-[280px] flex-shrink-0"
+            className="min-w-[220px] max-w-[220px] sm:min-w-[280px] sm:max-w-[280px] flex-shrink-0"
           >
             <ProductCard product={product} locale={locale} />
           </motion.div>
