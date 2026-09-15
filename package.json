@@ -16,6 +16,8 @@
     "db:reset": "tsx src/db/reset.ts && npm run db:setup"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.5",
+    "@supabase/supabase-js": "^2.112.4",
     "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
@@ -34,6 +36,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",
+    "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.21",

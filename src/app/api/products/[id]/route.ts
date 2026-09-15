@@ -6,9 +6,11 @@ import { eq } from 'drizzle-orm';
 export async function GET(
   _request: NextRequest,
   { params }: { params: { id: string } }
+  
 ) {
   try {
     const { id } = params;
+    console.log('Fetching product with ID:', id);
     const productId = parseInt(id);
     if (isNaN(productId)) {
       return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
@@ -24,6 +26,8 @@ export async function GET(
     }
 
     return NextResponse.json({ product });
+
+    console.log('Product fetched successfully:', product);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 });
   }
