@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
+import type { AnyPgTable } from 'drizzle-orm/pg-core';
 import * as schema from './src/db/schema';
 
 async function migrate() {
@@ -12,7 +13,7 @@ async function migrate() {
   const supabaseClient = postgres(process.env.DATABASE_URL!);
   const supabaseDb = drizzle(supabaseClient, { schema });
 
-  const migrateTable = async (tableName, schemaTable) => {
+  const migrateTable = async (tableName: string, schemaTable: AnyPgTable) => {
     console.log(`Migrating ${tableName}...`);
     const data = await neonDb.select().from(schemaTable);
     if (data.length > 0) {
