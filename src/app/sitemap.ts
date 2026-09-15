@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next';
 import { db } from '@/db';
 import { products, categories } from '@/db/schema';
 import { routing } from '@/i18n/routing';
+import { getProductSlug } from '@/lib/utils';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
@@ -35,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Dynamic products
     allProducts.forEach((product) => {
       sitemapEntries.push({
-        url: `${baseUrl}/${locale}/products/${product.id}`,
+        url: `${baseUrl}/${locale}/products/${getProductSlug(locale === 'ar' ? product.nameAr : product.nameEn)}`,
         lastModified: new Date(),
         changeFrequency: 'weekly',
         priority: 0.9,

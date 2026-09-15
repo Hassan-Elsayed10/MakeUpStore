@@ -5,6 +5,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function getProductSlug(name: string): string {
+  return name
+    .normalize('NFKC')
+    .trim()
+    .toLocaleLowerCase()
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9\u0600-\u06ff]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'product';
+}
+
 export function formatPrice(price: number | string): string {
   const num = typeof price === 'string' ? parseFloat(price) : price;
   return new Intl.NumberFormat('ar-EG', {

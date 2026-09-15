@@ -3,6 +3,7 @@ import { products, categories } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { ProductsPageClient } from './ProductsPageClient';
 import type { Metadata, ResolvingMetadata } from 'next';
+import { getProductSlug } from '@/lib/utils';
 
 type Props = {
   searchParams: { category?: string };
@@ -115,13 +116,13 @@ export default async function ProductsPage({ searchParams, params }: Props) {
           '@type': 'Brand',
           name: 'الْمُلْكُ للهِ'
         },
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products/${product.id}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products/${getProductSlug(localizedName)}`,
         offers: {
           '@type': 'Offer',
           price: effectivePrice,
           priceCurrency: 'EGP',
           availability: 'https://schema.org/InStock',
-          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products/${product.id}`,
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${params.locale}/products/${getProductSlug(localizedName)}`,
         }
       };
     })

@@ -187,7 +187,7 @@ export default function AdminProductsPage() {
                     <td className="p-4">
                       <div className="w-12 h-12 rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800 flex-shrink-0">
                         {product.image ? (
-                          <img src={product.image} alt="" className="w-full h-full object-cover" />
+                          <img src={product.image} alt={product.nameEn} className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <Sparkles className="w-5 h-5 text-neutral-300 dark:text-neutral-600" />

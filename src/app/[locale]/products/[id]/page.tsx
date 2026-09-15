@@ -1,18 +1,23 @@
 import { db } from '@/db';
 import { products, reviews, categories, productVariants } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { ProductDetailsClient } from './ProductDetailsClient';
 import type { Metadata, ResolvingMetadata } from 'next';
+import { getProductSlug } from '@/lib/utils';
+
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   try {
-    const allProducts = await db.select({ id: products.id }).from(products);
+    const allProducts = await db
+      .select({ id: products.id, nameEn: products.nameEn, nameAr: products.nameAr })
+      .from(products);
     const locales = ['en', 'ar'];
     return locales.flatMap((locale) =>
       allProducts.map((product) => ({
         locale,
-        id: product.id.toString(),
+        id: getProductSlug(locale === 'ar' ? product.nameAr : product.nameEn),
       }))
     );
   } catch {
@@ -28,18 +33,22 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const id = parseInt(params.id);
-  if (isNaN(id)) return { title: 'Product Not Found' };
-
   try {
-    const result = await db.select().from(products).where(eq(products.id, id)).limit(1);
-    if (!result.length) return { title: 'Product Not Found' };
-    
-    const product = result[0];
+    const result = await db.select().from(products);
+    const routeId = decodeURIComponent(params.id);
+    const numericId = Number(routeId);
+    const product = result.find((item) =>
+      Number.isInteger(numericId) && numericId > 0
+        ? item.id === numericId
+        : getProductSlug(params.locale === 'ar' ? item.nameAr : item.nameEn) === routeId
+    );
+    if (!product) return { title: 'Product Not Found' };
+
     const previousImages = (await parent).openGraph?.images || [];
     
     const localizedName = params.locale === 'ar' ? product.nameAr : product.nameEn;
     const localizedDesc = (params.locale === 'ar' ? product.descriptionAr : product.descriptionEn) || 'Premium makeup product';
+    const productSlug = getProductSlug(localizedName);
 
     const mainImage = product.image || '/og-image.png';
 
@@ -47,16 +56,16 @@ export async function generateMetadata(
       title: localizedName,
       description: localizedDesc,
       alternates: {
-        canonical: `/${params.locale}/products/${id}`,
+        canonical: `/${params.locale}/products/${productSlug}`,
         languages: {
-          'en': `/en/products/${id}`,
-          'ar': `/ar/products/${id}`,
+          'en': `/en/products/${getProductSlug(product.nameEn)}`,
+          'ar': `/ar/products/${getProductSlug(product.nameAr)}`,
         },
       },
       openGraph: {
         title: localizedName,
         description: localizedDesc,
-        url: `/products/${id}`,
+        url: `/${params.locale}/products/${productSlug}`,
         images: [mainImage, ...previousImages],
         type: 'website',
       },
@@ -74,22 +83,26 @@ export async function generateMetadata(
 
 export default async function ProductPage({ params }: Props) {
   const { id, locale } = params;
-  const productId = parseInt(id);
-  if (isNaN(productId)) notFound();
+  const routeId = decodeURIComponent(id);
 
   let product: any = null;
   let productReviews: any[] = [];
   let relatedProducts: any[] = [];
+  let productId: number;
+  let productSlug: string;
 
   try {
-    const result = await db
-      .select()
-      .from(products)
-      .where(eq(products.id, productId))
-      .limit(1);
+    const allProducts = await db.select().from(products);
+    const numericId = Number(routeId);
+    product = allProducts.find((item) =>
+      Number.isInteger(numericId) && numericId > 0
+        ? item.id === numericId
+        : getProductSlug(locale === 'ar' ? item.nameAr : item.nameEn) === routeId
+    );
 
-    if (result.length === 0) notFound();
-    product = result[0];
+    if (!product) notFound();
+    productId = product.id;
+    productSlug = getProductSlug(locale === 'ar' ? product.nameAr : product.nameEn);
     product.variants = await db
       .select()
       .from(productVariants)
@@ -112,6 +125,8 @@ export default async function ProductPage({ params }: Props) {
     // DB might not be ready
     notFound();
   }
+
+  if (routeId !== productSlug) redirect(`/${locale}/products/${encodeURIComponent(productSlug)}`);
 
   // Parse translations for JSON-LD
   const localizedName = locale === 'ar' ? product.nameAr : product.nameEn;
@@ -136,7 +151,7 @@ export default async function ProductPage({ params }: Props) {
     },
     offers: {
       '@type': 'Offer',
-      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${product.id}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${getProductSlug(localizedName)}`,
       priceCurrency: 'EGP',
       price: effectivePrice,
       availability: 'https://schema.org/InStock',

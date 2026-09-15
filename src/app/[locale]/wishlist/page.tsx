@@ -7,7 +7,7 @@ import { useCart } from '@/providers/CartProvider';
 import { useFeatureFlags } from '@/providers/FeatureFlagsProvider';
 import { useToast } from '@/providers/ToastProvider';
 import { Button } from '@/components/ui/Button';
-import { formatPrice } from '@/lib/utils';
+import { formatPrice, getProductSlug } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Heart, ShoppingBag, Trash2, Sparkles } from 'lucide-react';
 
@@ -68,12 +68,12 @@ export default function WishlistPage() {
                 transition={{ delay: index * 0.05 }}
                 className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 overflow-hidden"
               >
-                <Link href={`/products/${item.productId}`}>
+                <Link href={`/products/${getProductSlug(locale === 'ar' ? item.nameAr : item.nameEn)}`}>
                   <div className="aspect-[4/5] bg-gradient-to-br from-primary-50 to-accent-50 dark:from-neutral-800 dark:to-neutral-800 overflow-hidden">
                     {item.image ? (
                       <img
                         src={item.image}
-                        alt=""
+                        alt={locale === 'ar' ? item.nameAr : item.nameEn}
                         className="w-full h-full object-cover hover:scale-105 transition-transform"
                       />
                     ) : (

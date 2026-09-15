@@ -3,6 +3,7 @@ import { products } from '@/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import { OffersPageClient } from './OffersPageClient';
 import type { Metadata } from 'next';
+import { getProductSlug } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Exclusive Offers & Discounts',
@@ -59,13 +60,13 @@ export default async function OffersPage({
           '@type': 'Brand',
           name: 'الْمُلْكُ للهِ'
         },
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${product.id}`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${getProductSlug(localizedName)}`,
         offers: {
           '@type': 'Offer',
           price: effectivePrice,
           priceCurrency: 'EGP',
           availability: 'https://schema.org/InStock',
-          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${product.id}`,
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/${locale}/products/${getProductSlug(localizedName)}`,
         }
       };
     })

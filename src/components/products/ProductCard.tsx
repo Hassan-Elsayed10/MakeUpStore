@@ -2,7 +2,7 @@
 
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
-import { getLocalizedField, formatPrice } from '@/lib/utils';
+import { getLocalizedField, formatPrice, getProductSlug } from '@/lib/utils';
 import { useCart } from '@/providers/CartProvider';
 import { useWishlist } from '@/providers/WishlistProvider';
 import { useFeatureFlags } from '@/providers/FeatureFlagsProvider';
@@ -67,7 +67,7 @@ export function ProductCard({ product, locale }: { product: Product; locale: str
   };
 
   return (
-    <Link href={`/products/${product.id}`} className="group block">
+    <Link href={`/products/${getProductSlug(name)}`} className="group block">
       <div className="rounded-xl sm:rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
         {/* Image */}
         <div className="relative aspect-square sm:aspect-[4/5] bg-gradient-to-br from-primary-50 to-accent-50 dark:from-neutral-800 dark:to-neutral-800 overflow-hidden">

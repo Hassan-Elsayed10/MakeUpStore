@@ -121,7 +121,7 @@ function OrderDetailsModal({ order, onClose }: { order: Order; onClose: () => vo
                   >
                     <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary-50 to-accent-50 dark:from-neutral-700 dark:to-neutral-700 flex-shrink-0 overflow-hidden">
                       {item.product?.image ? (
-                        <img src={item.product.image} alt="" className="w-full h-full object-cover" />
+                        <img src={item.product.image} alt={item.product.nameEn} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <ShoppingBag className="w-5 h-5 text-primary-300" />

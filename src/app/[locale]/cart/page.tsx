@@ -138,7 +138,7 @@ export default function CartPage() {
                 >
                   <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-primary-50 to-accent-50 dark:from-neutral-800 dark:to-neutral-800 flex-shrink-0 overflow-hidden">
                     {item.image ? (
-                      <img src={item.image} alt="" className="w-full h-full object-cover" />
+                      <img src={item.image} alt={locale === 'ar' ? item.nameAr : item.nameEn} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <ShoppingBag className="w-8 h-8 text-primary-200" />
