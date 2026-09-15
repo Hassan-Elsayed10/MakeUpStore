@@ -67,12 +67,14 @@ export function Offers({ products }: { products: Product[] }) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => scroll('left')}
+              aria-label="Previous offers"
               className="p-3 rounded-full border border-neutral-700 hover:bg-neutral-800 transition-colors"
             >
               <ChevronLeft className="w-5 h-5 text-neutral-400" />
             </button>
             <button
               onClick={() => scroll('right')}
+              aria-label="Next offers"
               className="p-3 rounded-full border border-neutral-700 hover:bg-neutral-800 transition-colors"
             >
               <ChevronRight className="w-5 h-5 text-neutral-400" />

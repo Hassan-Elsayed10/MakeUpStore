@@ -58,7 +58,6 @@ export function Hero() {
       className="relative min-h-[100dvh] lg:h-screen w-full flex items-center justify-center overflow-hidden bg-[#050505] text-white selection:bg-rose-500/30"
     >
       {/* Immersive Cinematic Background Effects */}
-      <div className="absolute inset-0 z-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-700"
         style={{ background: radialGradient }}

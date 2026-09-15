@@ -180,7 +180,11 @@ export default async function ProductPage({ params }: Props) {
         worstRating: 1,
       },
       ...(rev.comment && { reviewBody: rev.comment }),
-      datePublished: rev.createdAt ? new Date(rev.createdAt).toISOString().split('T')[0] : undefined,
+      datePublished: (() => {
+        if (!rev.createdAt) return undefined;
+        const date = new Date(rev.createdAt);
+        return Number.isNaN(date.getTime()) ? undefined : date.toISOString().split('T')[0];
+      })(),
     }));
   }
 

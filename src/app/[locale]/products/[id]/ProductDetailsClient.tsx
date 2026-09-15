@@ -227,6 +227,7 @@ export function ProductDetailsClient({
                   <button
                     onClick={() => setQty(Math.max(1, qty - 1))}
                     className="p-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                    aria-label="Decrease quantity"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
@@ -236,6 +237,7 @@ export function ProductDetailsClient({
                   <button
                     onClick={() => setQty(qty + 1)}
                     className="p-2.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                    aria-label="Increase quantity"
                   >
                     <Plus className="w-4 h-4" />
                   </button>

@@ -67,6 +67,7 @@ export function Header() {
             <Link
               href="/wishlist"
               className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-400 transition-colors"
+              aria-label={t('wishlist')}
             >
               <Heart className="w-5 h-5" />
             </Link>
@@ -75,6 +76,7 @@ export function Header() {
               <Link
                 href="/cart"
                 className="relative p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-400 transition-colors"
+                aria-label={t('cart')}
               >
                 <ShoppingBag className="w-5 h-5" />
                 {totalItems > 0 && (
@@ -89,6 +91,8 @@ export function Header() {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-400 transition-colors"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>

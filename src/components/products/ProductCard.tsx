@@ -113,6 +113,7 @@ export function ProductCard({ product, locale }: { product: Product; locale: str
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={handleToggleWishlist}
+              aria-label={inWishlist ? `Remove ${name} from wishlist` : `Add ${name} to wishlist`}
               className={`p-1.5 sm:p-2 rounded-full shadow-md transition-colors ${
                 inWishlist
                   ? 'bg-primary-500 text-white'
@@ -151,6 +152,7 @@ export function ProductCard({ product, locale }: { product: Product; locale: str
                 whileTap={product.outOfStock ? undefined : { scale: 0.9 }}
                 onClick={handleAddToCart}
                 disabled={!!product.outOfStock}
+                aria-label={product.outOfStock ? `${name} is out of stock` : `Add ${name} to cart`}
                 className={`p-1.5 sm:p-2 rounded-lg transition-colors ${
                   product.outOfStock
                     ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-600 cursor-not-allowed'

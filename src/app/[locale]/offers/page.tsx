@@ -5,23 +5,28 @@ import { OffersPageClient } from './OffersPageClient';
 import type { Metadata } from 'next';
 import { getProductSlug } from '@/lib/utils';
 
-export const metadata: Metadata = {
-  title: 'Exclusive Offers & Discounts',
-  description: 'Shop our exclusive beauty offers and discounted luxury makeup products.',
-  alternates: {
-    canonical: '/offers',
-    languages: {
-      'en': '/en/offers',
-      'ar': '/ar/offers',
-    },
-  },
-  openGraph: {
-    title: 'Exclusive Offers & Discounts | الْمُلْكُ للهِ',
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.almulklillah.com';
+
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+  const url = `${siteUrl}/${params.locale}/offers`;
+  return {
+    title: 'Exclusive Offers & Discounts',
     description: 'Shop our exclusive beauty offers and discounted luxury makeup products.',
-    url: '/offers',
-    type: 'website',
-  },
-};
+    alternates: {
+      canonical: url,
+      languages: {
+        'en': `${siteUrl}/en/offers`,
+        'ar': `${siteUrl}/ar/offers`,
+      },
+    },
+    openGraph: {
+      title: 'Exclusive Offers & Discounts | الْمُلْكُ للهِ',
+      description: 'Shop our exclusive beauty offers and discounted luxury makeup products.',
+      url,
+      type: 'website',
+    },
+  };
+}
 
 export default async function OffersPage({
   params: { locale }

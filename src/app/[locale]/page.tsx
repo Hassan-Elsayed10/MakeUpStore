@@ -15,7 +15,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = params;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.almulklillah.com';
 
   const isArabic = locale === 'ar';
   const title = isArabic

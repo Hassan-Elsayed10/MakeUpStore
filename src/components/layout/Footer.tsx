@@ -150,6 +150,7 @@ export function Footer() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                title="Store location map"
               />
             </div>
           </div>

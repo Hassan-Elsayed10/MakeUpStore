@@ -13,7 +13,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import '@/app/globals.css';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://almulklillah.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.almulklillah.com';
 
 type Props = {
   children: ReactNode;
